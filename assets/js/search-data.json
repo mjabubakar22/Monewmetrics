@@ -3,9 +3,9 @@
     
         "post0": {
             "title": "Tech Portfolio Analysis",
-            "content": "Tech-Portfolio-Analysis . In this notebook, I’ll be constructing and analyzing an equal-weighted portfolio which will constitute a list of my favorite large-cap tech stocks that I had already screened using various metrics like debt to asset ratio, investor yield and other metrics. . I will then use a monte carlo simulation to find the optimal weightings of the tech stocks which i will compare against certain benchmarks and pick the best one out of the lot . (view notebook here) . .",
-            "url": "https://mjabubakar22.github.io/Monewmetrics/markdown/2022/05/01/Tech-Portfolio-Analysis.html",
-            "relUrl": "/markdown/2022/05/01/Tech-Portfolio-Analysis.html",
+            "content": "In this notebook, I’ll be constructing and analyzing an equal-weighted portfolio which will constitute a list of my favorite large-cap tech stocks that I had already screened using various metrics like debt to asset ratio, investor yield and other metrics. . I will then use a monte carlo simulation to find the optimal weightings of the tech stocks which i will compare against certain benchmarks and pick the best one out of the lot . (view notebook here) . .",
+            "url": "https://mjabubakar22.github.io/Monewmetrics/quantitative%20finance/2022/05/01/Tech-Portfolio-Analysis.html",
+            "relUrl": "/quantitative%20finance/2022/05/01/Tech-Portfolio-Analysis.html",
             "date": " • May 1, 2022"
         }
         
