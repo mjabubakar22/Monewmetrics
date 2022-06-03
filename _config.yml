@@ -7,7 +7,7 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: fastpages
-description: An easy to use blogging platform with support for Jupyter Notebooks.
+description: Quantitative finance, Quantitative trading and Equity analysis
 github_username: mjabubakar22
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "Monewmetrics"
@@ -39,8 +39,7 @@ baseurl: "/Monewmetrics" # the subpath of your site, e.g. "/blog".
 # Github and twitter are optional:
 minima:
   social_links:
-    twitter: fastdotai
-    github: fastai
+    github: mjabubakar22
 
 # Set this to true to get LaTeX math equation support
 use_math: 
@@ -49,7 +48,7 @@ use_math:
 show_description: true
 
 # Set this to true to display image previews on home page, if they exist
-show_image: false
+show_image: true
 
 # Set this to true to turn on annotations with hypothes.is (https://web.hypothes.is/)
 annotations: false
