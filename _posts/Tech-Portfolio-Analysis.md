@@ -1,3 +1,11 @@
+---
+toc: true
+layout: post
+description: Technology stock portfolio construction and analysis.
+categories: [markdown]
+title: Tech Portfolio Analysis
+---
+
 # [Tech-Portfolio-Analysis](https://nbviewer.org/github/mjabubakar22/Tech-Portfolio-Analysis/blob/main/Tech%20Stocks%20Portfolio.ipynb)
 In this notebook, I’ll be constructing and analyzing an equal-weighted portfolio which will constitute a list of my favorite large-cap tech stocks that I had already screened using various metrics like debt to asset ratio, investor yield and other metrics.
 
