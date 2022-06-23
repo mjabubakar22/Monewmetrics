@@ -8,9 +8,11 @@ The website focuses on quantitative research primarily in finance, trading, port
 
 But also publish financial analysis, research, and valuation on equities/publicly traded companies through seeking alpha
 
-I am a self-taught and aspiring finance practitioner with a huge passion for finance specifically the capital markets and how one can use/leverage data, Statistics & Probability, intuition, and other relevant skills and tools inorder to succeed in the industry
+I am a self-taught and aspiring finance practitioner with a huge passion for finance specifically the capital markets and how i can use/leverage data, Statistics & Probability, intuition, and other relevant skills and tools inorder to succeed in the industry
 
-DISCLAIMER!
+
+
+### DISCLAIMER!
 Before proceeding, please make sure that you note the following important information:
 
 NOT FINANCIAL ADVICE!
