@@ -202,7 +202,7 @@ window.onload = wrap_img;
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="DISCLAIMER!">
-<a class="anchor" href="#DISCLAIMER!" aria-hidden="true"><span class="octicon octicon-link"></span></a>DISCLAIMER!<a class="anchor-link" href="#DISCLAIMER!"> </a>
+<a class="anchor" href="#DISCLAIMER!" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>DISCLAIMER!</strong><a class="anchor-link" href="#DISCLAIMER!"> </a>
 </h3>
 <p><em>Before proceeding, please make sure that you note the following important information</em>:</p>
 <p><em>NOT FINANCIAL ADVICE!</em></p>
@@ -216,7 +216,7 @@ window.onload = wrap_img;
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Intro-on-time-series:">
-<a class="anchor" href="#Intro-on-time-series:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Intro on time series:<a class="anchor-link" href="#Intro-on-time-series:"> </a>
+<a class="anchor" href="#Intro-on-time-series:" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Intro on time series</strong>:<a class="anchor-link" href="#Intro-on-time-series:"> </a>
 </h3>
 <p>A time series is a sequence of data that attaches a time period to each value, the value can be anything measurable that depends on time in some way like rainfall measurements, heart rate measurements, annual retail sales, monthly subscription, trading volumes, security prices, exchange rates and so on.</p>
 <p>All we need for a time series is a starting point and an ending point(a time period), all time periods must be equal and clearly defined which would result in a constant frequency. The frequency is how often the values of the data set are recorded which could be hourly, daily, monthly, quarterly, etc. There are also no limitations regarding the total time span of our time series.</p>
@@ -262,7 +262,7 @@ While multivariate time series is when we are forecasting the value of a single 
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Objective:">
-<a class="anchor" href="#Objective:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objective:<a class="anchor-link" href="#Objective:"> </a>
+<a class="anchor" href="#Objective:" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Objective</strong>:<a class="anchor-link" href="#Objective:"> </a>
 </h3>
 <p>The American economy contracted an annualized 1.6%  in Q1 2022. It was the first contraction since the pandemic-induced recession in 2020 as record trade deficits, supply constraints, worker shortages, and high inflation weigh.</p>
 <p>Year to date, the S&amp;P500 is down approximately 20% this officially puts it in a bear market territory. As fear of recession weighs in, historically the consumer staple sector usually fare well during these downturns as the idea is that companies in these sectors produce goods &amp; services that consumers will buy regardless of the economic conditions.</p>
@@ -277,7 +277,7 @@ While multivariate time series is when we are forecasting the value of a single 
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="What-is-an-ARIMA-model:">
-<a class="anchor" href="#What-is-an-ARIMA-model:" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is an ARIMA model:<a class="anchor-link" href="#What-is-an-ARIMA-model:"> </a>
+<a class="anchor" href="#What-is-an-ARIMA-model:" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>What is an ARIMA model</strong>:<a class="anchor-link" href="#What-is-an-ARIMA-model:"> </a>
 </h3>
 <p>ARIMA stands for Autoregressive Integrated Moving Average. ARIMA is also known as the Box-Jenkins approach. it is a combination of an AR model, MA model, and differencing (Integration).</p>
 <h4 id="The-components-of-an-ARIMA-model:">
@@ -334,7 +334,7 @@ While multivariate time series is when we are forecasting the value of a single 
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="EDA:">
-<a class="anchor" href="#EDA:" aria-hidden="true"><span class="octicon octicon-link"></span></a>EDA:<a class="anchor-link" href="#EDA:"> </a>
+<a class="anchor" href="#EDA:" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>EDA</strong>:<a class="anchor-link" href="#EDA:"> </a>
 </h3>
 <p>The objective now is to perform an Exploratory Data Analysis(EDA) on the dataset (Closing prices of PG)  to find the values of p, q, and d</p>
 <p>Before performing EDA, I'm going to split the data first and work only with the train data set which I will use to perform the EDA on, while the test data will be used to evaluate the prediction</p>
@@ -5261,9 +5261,9 @@ weak evidence against null hypothesis, time series has a unit root, indicating i
 <a class="anchor" href="#Differencing:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Differencing:<a class="anchor-link" href="#Differencing:"> </a>
 </h4>
 <p>Differencing is a method of making a times series dataset stationary, by subtracting the observation in the previous time step from the current observation. This process can be repeated more than once, and the number of times differencing is performed is called the difference order.</p>
-<p>Let’s look at the equation again:
-*formula</p>
-<p>But now the question is at what difference order? Once, twice?. The aim is to avoid over-differencing because it can lead to loss of valuable information about the time series and this often affects the construction of the model</p>
+<p>Let’s look at the equation again:</p>
+<p><em>$Y_{t}^′ = Y_{t} − Y_{t−1}$</em></p>
+<p>So now the question is at what difference order? Once, twice?. The aim is to avoid over-differencing because it can lead to loss of valuable information about the time series and this often affects the construction of the model</p>
 <p>We could repeat the visual and statistical test every time we difference our time series but fortunately, there is a helpful package we can use called pmdarima and it will tell us at what order should we difference our time series
 (under the hood it repeats our statistical test and constantly checks at what order will the null hypothesis be rejected)</p>
 
@@ -11791,7 +11791,7 @@ z
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Model-development-&amp;-Evaluation:">
-<a class="anchor" href="#Model-development-&amp;-Evaluation:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model development &amp; Evaluation:<a class="anchor-link" href="#Model-development-&amp;-Evaluation:"> </a>
+<a class="anchor" href="#Model-development-&amp;-Evaluation:" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Model development &amp; Evaluation</strong>:<a class="anchor-link" href="#Model-development-&amp;-Evaluation:"> </a>
 </h3>
 <p>Now that we have determined the parameters (p,d,q), we will estimate the accuracy of the ARIMA model on a training data set and then use the fitted model to forecast the values of the test data set using a forecasting function. In the end, we cross-check whether our forecasted values are in line with the actual values.</p>
 
@@ -15677,7 +15677,7 @@ Freq: D, Name: mean, Length: 149, dtype: float64</pre>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The auto_arima() function can take a number of paramters but to keep it simple i'll just run the function and get the default best model, all we need to do is  just pass in our time series data.</p>
+<p>The <code>auto_arima()</code> function can take a number of paramters but to keep it simple i'll just run the function and get the default best model, all we need to do is  just pass in our time series data.</p>
 
 </div>
 </div>
@@ -19599,7 +19599,7 @@ Freq: D, Name: mean, Length: 149, dtype: float64</pre>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Conclusion:">
-<a class="anchor" href="#Conclusion:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusion:<a class="anchor-link" href="#Conclusion:"> </a>
+<a class="anchor" href="#Conclusion:" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Conclusion</strong>:<a class="anchor-link" href="#Conclusion:"> </a>
 </h3>
 <p>Even after the default best model, the values haven't changed much as they look constant from afar.</p>
 <p>Stock data is complex and are usually composed of linear and non-linear components. So just using a linear model to make predictions will not be efficient, especially using ARIMA to predict prices as we saw didn’t provide a realistic prediction, they may however be useful to predict the overall trend of a time series.</p>
