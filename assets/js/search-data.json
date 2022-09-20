@@ -82,6 +82,17 @@
   
 
   
+      ,"page2": {
+          "title": "Categories",
+          "content": ". Equity research and analysis . Footlocker Inc Stock Analysis and Valuation . Microsoft Corporation Stock Analysis and Valuation . Amdocs Limited Stock Analysis and Valuation . . Quantitative Finance . Technology Portfolio Analysis . . Quantitative Trading . Stock Price Prediction Using ARIMA Model . BTC/USD Price Prediction .",
+          "url": "https://mjabubakar22.github.io/Monewmetrics/categories/",
+          "relUrl": "/categories/",
+          "date": ""
+      }
+      
+  
+
+  
 
   
   
@@ -103,7 +114,7 @@
   
 
   
-      ,"page10": {
+      ,"page11": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://mjabubakar22.github.io/Monewmetrics/robots.txt",
