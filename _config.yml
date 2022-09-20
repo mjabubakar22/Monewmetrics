@@ -6,13 +6,14 @@
 # https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
 # https://learnxinyminutes.com/docs/yaml/
 
-title: images/Monewmetrics.png
+title: Monewmetrics
 description: Quantitative finance, Quantitative trading and Equity analysis
 github_username: mjabubakar22
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "Monewmetrics"
 # Specify the name of a file to show as a masthead graphic at the top of each page, instead of a title, here:
-masthead: images/Monewmetrics.png
+#masthead: images/Monewmetrics.png
+logo: images/Monewmetrics.png
 
 # OPTIONAL: override baseurl and url if using a custom domain
 # Note: leave out the trailing / from this value. 
