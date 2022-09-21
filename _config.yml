@@ -15,7 +15,7 @@ email: mjabubakar22@gmail.com
 github_repo: "Monewmetrics"
 # Specify the name of a file to show as a masthead graphic at the top of each page, instead of a title, here:
 #masthead: images/Monewmetrics.png
-logo: images/Monewmetrics.png
+logo: assets/Monewmetrics.png
 
 # OPTIONAL: override baseurl and url if using a custom domain
 # Note: leave out the trailing / from this value. 
@@ -52,7 +52,7 @@ minima:
     # facebook: jekyll
     # flickr:   jekyll
     # instagram: jekyll
-    linkedin: www.linkedin.com/in/mj-abubakar
+    linkedin: https://www.linkedin.com/in/mj-abubakar/
 
 # Set this to true to get LaTeX math equation support
 use_math: true
