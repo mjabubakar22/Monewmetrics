@@ -16,7 +16,7 @@ author:
 github_repo: "Monewmetrics"
 # Specify the name of a file to show as a masthead graphic at the top of each page, instead of a title, here:
 #masthead: images/Monewmetrics.png
-logo: Monewmetrics.png 
+logo: images/Monewmetrics.png 
 
 # OPTIONAL: override baseurl and url if using a custom domain
 # Note: leave out the trailing / from this value. 
