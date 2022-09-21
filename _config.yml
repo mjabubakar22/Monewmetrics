@@ -47,13 +47,12 @@ minima:
   social_links:
     github: mjabubakar22
     #twitter: jekyllrb
-    github:  jekyll
     # devto: jekyll
     # dribbble: jekyll
     # facebook: jekyll
     # flickr:   jekyll
     # instagram: jekyll
-    linkedin: https://www.linkedin.com/in/mj-abubakar/
+    linkedin: mj-abubakar
 
 # Set this to true to get LaTeX math equation support
 use_math: true
