@@ -10,6 +10,8 @@ But also publish financial analysis, research, and valuation on equities/publicl
 
 I am a self-taught and aspiring finance practitioner with a huge passion for finance specifically the capital markets and how i can use/leverage data, Statistics & Probability, intuition, and other relevant skills and tools inorder to succeed in the industry
 
+![image](/images/monew.png)
+
 
 
 ### DISCLAIMER!
