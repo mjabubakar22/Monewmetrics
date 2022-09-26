@@ -1,0 +1,2901 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>BTC/USD Price Prediction Using Linear Regression | Monewmetrics</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="BTC/USD Price Prediction Using Linear Regression" />
+<meta name="author" content="Mbarak J Abubakar" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this notebook I’m going to try and predict the BTC/USD close price(target/dependant variable) for the month of June 2022 using the linear regression as the chosen model, I will also use a set of relevant independent variables like moving averages, volume, etc. I’ll follow a basic data science workflow from importing data to model development and evaluation. Lastly, assuming the model passes the validation stage, I will bactest and measure its performance as a trading strategy to further gain insights on how reliable it can be before placing any trade based on the prediction made" />
+<meta property="og:description" content="In this notebook I’m going to try and predict the BTC/USD close price(target/dependant variable) for the month of June 2022 using the linear regression as the chosen model, I will also use a set of relevant independent variables like moving averages, volume, etc. I’ll follow a basic data science workflow from importing data to model development and evaluation. Lastly, assuming the model passes the validation stage, I will bactest and measure its performance as a trading strategy to further gain insights on how reliable it can be before placing any trade based on the prediction made" />
+<link rel="canonical" href="https://mjabubakar22.github.io/Monewmetrics/quantitative%20research/2022/06/01/btc-usd-price-prediction.html" />
+<meta property="og:url" content="https://mjabubakar22.github.io/Monewmetrics/quantitative%20research/2022/06/01/btc-usd-price-prediction.html" />
+<meta property="og:site_name" content="Monewmetrics" />
+<meta property="og:image" content="https://mjabubakar22.github.io/Monewmetrics/images/lr.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-06-01T00:00:00-05:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://mjabubakar22.github.io/Monewmetrics/images/lr.png" />
+<meta property="twitter:title" content="BTC/USD Price Prediction Using Linear Regression" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mbarak J Abubakar"},"dateModified":"2022-06-01T00:00:00-05:00","datePublished":"2022-06-01T00:00:00-05:00","description":"In this notebook I’m going to try and predict the BTC/USD close price(target/dependant variable) for the month of June 2022 using the linear regression as the chosen model, I will also use a set of relevant independent variables like moving averages, volume, etc. I’ll follow a basic data science workflow from importing data to model development and evaluation. Lastly, assuming the model passes the validation stage, I will bactest and measure its performance as a trading strategy to further gain insights on how reliable it can be before placing any trade based on the prediction made","headline":"BTC/USD Price Prediction Using Linear Regression","image":"https://mjabubakar22.github.io/Monewmetrics/images/lr.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://mjabubakar22.github.io/Monewmetrics/quantitative%20research/2022/06/01/btc-usd-price-prediction.html"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://mjabubakar22.github.io/Monewmetrics/images/Monewmetrics.png"},"name":"Mbarak J Abubakar"},"url":"https://mjabubakar22.github.io/Monewmetrics/quantitative%20research/2022/06/01/btc-usd-price-prediction.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Monewmetrics/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://mjabubakar22.github.io/Monewmetrics/feed.xml" title="Monewmetrics" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1D7H2V3J89"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1D7H2V3J89');
+</script>
+
+
+<link rel="shortcut icon" type="image/x-icon" href="/Monewmetrics/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.js"></script>
+<script type="text/javascript">
+  if (typeof require !== 'undefined') {
+      require.undef("plotly");
+      requirejs.config({
+          paths: {
+              'plotly': ['https://cdn.plot.ly/plotly-latest.min']
+          }
+      });
+      require(['plotly'], function(Plotly) {
+          window._Plotly = Plotly;
+      });
+  }
+</script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper">
+
+    
+    
+    <a class="site-title" href="https://mjabubakar22.github.io/Monewmetrics/">
+      
+        <img src="https://mjabubakar22.github.io/Monewmetrics/images/Monewmetrics.png" class="site-logo" width="auto" height="56">
+      
+    </a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15" width="18px" height="15px">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="https://mjabubakar22.github.io/Monewmetrics/about/">About</a>
+          
+        
+          
+          <a class="page-link" href="https://mjabubakar22.github.io/Monewmetrics/categories/">Categories</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="https://mjabubakar22.github.io/Monewmetrics/search/">Search</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">BTC/USD Price Prediction Using Linear Regression</h1><p class="page-description">In this notebook I’m going to try and predict the BTC/USD close price(target/dependant variable) for the month of June 2022 using the linear regression as the chosen model, I will also use a set of relevant independent variables like moving averages, volume, etc. I’ll follow a basic data science workflow from importing data to model development and evaluation. Lastly, assuming the model passes the validation stage, I will bactest and measure its performance as a trading strategy to further gain insights on how reliable it can be before placing any trade based on the prediction made</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-06-01T00:00:00-05:00" itemprop="datePublished">
+        Jun 1, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      17 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/Monewmetrics/categories/#Quantitative Research">Quantitative Research</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-justify-center">
+          <div class="px-2">
+
+    <a href="https://github.com/mjabubakar22/Monewmetrics/tree/master/_notebooks/2022-06-01-btc-usd-price-prediction.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Monewmetrics/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/mjabubakar22/Monewmetrics/master?filepath=_notebooks%2F2022-06-01-btc-usd-price-prediction.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Monewmetrics/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/mjabubakar22/Monewmetrics/blob/master/_notebooks/2022-06-01-btc-usd-price-prediction.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Monewmetrics/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+          <div class="px-2">
+  <a href="https://deepnote.com/launch?url=https%3A%2F%2Fgithub.com%2Fmjabubakar22%2FMonewmetrics%2Fblob%2Fmaster%2F_notebooks%2F2022-06-01-btc-usd-price-prediction.ipynb" target="_blank">
+      <img class="notebook-badge-image" src="/Monewmetrics/assets/badges/deepnote.svg" alt="Launch in Deepnote"/>
+  </a>
+</div>
+
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h3"><a href="#DISCLAIMER!">DISCLAIMER! </a></li>
+<li class="toc-entry toc-h3"><a href="#Import-Data">Import Data </a></li>
+<li class="toc-entry toc-h3"><a href="#Data-Cleaning-and-Wrangling">Data Cleaning and Wrangling </a></li>
+<li class="toc-entry toc-h3"><a href="#Explanatory-Data-Analysis">Explanatory Data Analysis </a></li>
+<li class="toc-entry toc-h3"><a href="#The-Pearson-correlation-coefficient-and-p-value">The Pearson correlation coefficient and p value </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Pearson-Correlation:">Pearson Correlation: </a></li>
+<li class="toc-entry toc-h4"><a href="#P-Value:">P-Value: </a></li>
+<li class="toc-entry toc-h4"><a href="#NOTE:">NOTE: </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#Model-Development">Model Development </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#$$-y-=-β_{0}-\;+-\;β_{1}-*-\;X_{1}-+-\;β_{2}-*-\;X_{2}-+-\;β_{3}-*-\;X_{3}-+-\;β_{4}-*-\;X_{4}$$">$$ y = β_{0} \;+ \;β_{1} * \;X_{1} + \;β_{2} * \;X_{2} + \;β_{3} * \;X_{3} + \;β_{4} * \;X_{4}$$ </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#Model-Evaluation">Model Evaluation </a></li>
+<li class="toc-entry toc-h3"><a href="#Conclusion">Conclusion </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-06-01-btc-usd-price-prediction.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="DISCLAIMER!">
+<a class="anchor" href="#DISCLAIMER!" aria-hidden="true"><span class="octicon octicon-link"></span></a>DISCLAIMER!<a class="anchor-link" href="#DISCLAIMER!"> </a>
+</h3>
+<p><em>Before proceeding, please make sure that you note the following important information</em>:</p>
+<p><em>NOT FINANCIAL ADVICE!</em></p>
+<p><em>My content is intended to be used and must be used for informational and educational purposes only</em>. 
+<em>I am not an attorney, CPA, or financial advisor, nor am I holding myself out to be, and the information contained on this blog/notebook is not a substitute for financial advice, None of the information contained here constitutes an offer (or solicitation of an offer) to buy or sell any security or financial instrument to make any investment or to participate in any particular trading strategy. Always seek advice from a professional who is aware of the facts and circumstances of your individual situation. Or, Independently research and verify any information that you find on my blog/notebook and wish to rely upon in making any investment decision or otherwise. I accept no liability whatsoever for any loss or damage you may incur</em></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">r2_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">plotly.offline</span> <span class="kn">import</span> <span class="n">init_notebook_mode</span><span class="p">,</span> <span class="n">iplot</span>
+<span class="n">init_notebook_mode</span><span class="p">(</span><span class="n">connected</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+        <script type="text/javascript">
+        window.PlotlyConfig = {MathJaxConfig: 'local'};
+        if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+        if (typeof require !== 'undefined') {
+        require.undef("plotly");
+        requirejs.config({
+            paths: {
+                'plotly': ['https://cdn.plot.ly/plotly-2.11.1.min']
+            }
+        });
+        require(['plotly'], function(Plotly) {
+            window._Plotly = Plotly;
+        });
+        }
+        </script>
+        
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Import-Data">
+<a class="anchor" href="#Import-Data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Import Data<a class="anchor-link" href="#Import-Data"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#BTC price and volume</span>
+
+<span class="c1">#you will import Gold price when you start creating the indipendant variables</span>
+
+<span class="c1"># Read data</span>
+<span class="n">Df</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'BTC-USD'</span><span class="p">,</span> <span class="s1">'2012-01-01'</span><span class="p">,</span> <span class="s1">'2022-05-31'</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span> <span class="s1">'1mo'</span><span class="p">,</span> <span class="n">auto_adjust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Only keep close columns</span>
+<span class="n">Df</span> <span class="o">=</span> <span class="n">Df</span><span class="p">[[</span><span class="s1">'Close'</span><span class="p">,</span><span class="s1">'Volume'</span><span class="p">]]</span>
+
+<span class="c1"># Drop rows with missing values</span>
+<span class="n">Df</span> <span class="o">=</span> <span class="n">Df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[*********************100%***********************]  1 of 1 completed
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Data-Cleaning-and-Wrangling">
+<a class="anchor" href="#Data-Cleaning-and-Wrangling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Cleaning and Wrangling<a class="anchor-link" href="#Data-Cleaning-and-Wrangling"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Before any modeling can be done, there are a few steps needed to prepare the data before feeding it to the model, at least by arranging the data set in a way it makes sense</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">Df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'Close'</span><span class="p">,</span> <span class="s1">'Volume'</span><span class="p">]:</span> 
+      <span class="n">df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float64'</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Close</th>
+      <th>Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014-10-01</td>
+      <td>338.321014</td>
+      <td>9.029944e+08</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014-11-01</td>
+      <td>378.046997</td>
+      <td>6.597334e+08</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014-12-01</td>
+      <td>320.192993</td>
+      <td>5.531023e+08</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015-01-01</td>
+      <td>217.464005</td>
+      <td>1.098812e+09</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015-02-01</td>
+      <td>254.263000</td>
+      <td>7.115187e+08</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022-01-01</td>
+      <td>38483.125000</td>
+      <td>9.239790e+11</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022-02-01</td>
+      <td>43193.234375</td>
+      <td>6.713360e+11</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022-03-01</td>
+      <td>45538.675781</td>
+      <td>8.309438e+11</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022-04-01</td>
+      <td>37714.875000</td>
+      <td>8.301159e+11</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>2022-05-01</td>
+      <td>31792.310547</td>
+      <td>1.105689e+12</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 3 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Because I'm working with monthly data, I'll drop the days in the date to avoid confusion</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">date_format</span> <span class="o">=</span> <span class="s2">"%Y/%m"</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'Date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Date'</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">date_format</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Close</th>
+      <th>Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014/10</td>
+      <td>338.321014</td>
+      <td>9.029944e+08</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014/11</td>
+      <td>378.046997</td>
+      <td>6.597334e+08</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014/12</td>
+      <td>320.192993</td>
+      <td>5.531023e+08</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015/01</td>
+      <td>217.464005</td>
+      <td>1.098812e+09</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015/02</td>
+      <td>254.263000</td>
+      <td>7.115187e+08</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022/01</td>
+      <td>38483.125000</td>
+      <td>9.239790e+11</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022/02</td>
+      <td>43193.234375</td>
+      <td>6.713360e+11</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022/03</td>
+      <td>45538.675781</td>
+      <td>8.309438e+11</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022/04</td>
+      <td>37714.875000</td>
+      <td>8.301159e+11</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>2022/05</td>
+      <td>31792.310547</td>
+      <td>1.105689e+12</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 3 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Bitcoin is often referred to as "digital gold" by its backers hence I'll add the gold price and volume data as potential independent variables and I'll explore further to see its relationship and whether or not it will be a good predictor</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gold</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'GLD'</span><span class="p">,</span> <span class="s1">'2014-10-01'</span><span class="p">,</span> <span class="s1">'2022-05-31'</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span> <span class="s1">'1mo'</span><span class="p">,</span> <span class="n">auto_adjust</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">gold</span> <span class="o">=</span> <span class="n">gold</span><span class="p">[[</span><span class="s1">'Close'</span><span class="p">,</span><span class="s1">'Volume'</span><span class="p">]]</span>
+<span class="n">gld</span> <span class="o">=</span> <span class="n">gold</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'Close'</span><span class="p">,</span> <span class="s1">'Volume'</span><span class="p">]:</span> 
+      <span class="n">gld</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">=</span>  <span class="n">gld</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float64'</span><span class="p">)</span>
+<span class="n">gld</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[*********************100%***********************]  1 of 1 completed
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Close</th>
+      <th>Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014-10-01</td>
+      <td>112.660004</td>
+      <td>155183900.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014-11-01</td>
+      <td>112.110001</td>
+      <td>147594200.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014-12-01</td>
+      <td>113.580002</td>
+      <td>153722200.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015-01-01</td>
+      <td>123.449997</td>
+      <td>198034100.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015-02-01</td>
+      <td>116.160004</td>
+      <td>125686200.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022-01-01</td>
+      <td>168.089996</td>
+      <td>211125100.0</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022-02-01</td>
+      <td>178.380005</td>
+      <td>254601300.0</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022-03-01</td>
+      <td>180.649994</td>
+      <td>377087100.0</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022-04-01</td>
+      <td>176.910004</td>
+      <td>195346400.0</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>2022-05-01</td>
+      <td>171.139999</td>
+      <td>179902200.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 3 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The other two independent variables will be the moving averages and volume</p>
+<p>moving averages are often used by technical analysts to keep track of price trends for specific securities. I'll use the 3 and 6 month exponential moving averages but whether it's simple, weighted, or exponential in general it doesn't really make much of a difference (but this could be a good hypothesis to test)</p>
+<p>Volume is also a well-known indicator of price movement, Trading volume is the total number of shares/units of a security traded during a given period of time.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'ema3'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Close'</span><span class="p">]</span><span class="o">.</span><span class="n">ewm</span><span class="p">(</span><span class="n">span</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">adjust</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'ema6'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Close'</span><span class="p">]</span><span class="o">.</span><span class="n">ewm</span><span class="p">(</span><span class="n">span</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">adjust</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Close</th>
+      <th>Volume</th>
+      <th>ema3</th>
+      <th>ema6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014/10</td>
+      <td>338.321014</td>
+      <td>9.029944e+08</td>
+      <td>338.321014</td>
+      <td>338.321014</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014/11</td>
+      <td>378.046997</td>
+      <td>6.597334e+08</td>
+      <td>358.184006</td>
+      <td>349.671295</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014/12</td>
+      <td>320.192993</td>
+      <td>5.531023e+08</td>
+      <td>339.188499</td>
+      <td>341.248923</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015/01</td>
+      <td>217.464005</td>
+      <td>1.098812e+09</td>
+      <td>278.326252</td>
+      <td>305.881804</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015/02</td>
+      <td>254.263000</td>
+      <td>7.115187e+08</td>
+      <td>266.294626</td>
+      <td>291.133574</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022/01</td>
+      <td>38483.125000</td>
+      <td>9.239790e+11</td>
+      <td>44519.703176</td>
+      <td>46247.967191</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022/02</td>
+      <td>43193.234375</td>
+      <td>6.713360e+11</td>
+      <td>43856.468776</td>
+      <td>45375.186387</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022/03</td>
+      <td>45538.675781</td>
+      <td>8.309438e+11</td>
+      <td>44697.572278</td>
+      <td>45421.897642</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022/04</td>
+      <td>37714.875000</td>
+      <td>8.301159e+11</td>
+      <td>41206.223639</td>
+      <td>43219.891173</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>2022/05</td>
+      <td>31792.310547</td>
+      <td>1.105689e+12</td>
+      <td>36499.267093</td>
+      <td>39954.868137</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 5 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'Gold Close'</span><span class="p">]</span> <span class="o">=</span> <span class="n">gld</span><span class="p">[</span><span class="s1">'Close'</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'Gold Volume'</span><span class="p">]</span> <span class="o">=</span> <span class="n">gld</span><span class="p">[</span><span class="s1">'Volume'</span><span class="p">]</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Close</th>
+      <th>Volume</th>
+      <th>ema3</th>
+      <th>ema6</th>
+      <th>Gold Close</th>
+      <th>Gold Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014/10</td>
+      <td>338.321014</td>
+      <td>9.029944e+08</td>
+      <td>338.321014</td>
+      <td>338.321014</td>
+      <td>112.660004</td>
+      <td>155183900.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014/11</td>
+      <td>378.046997</td>
+      <td>6.597334e+08</td>
+      <td>358.184006</td>
+      <td>349.671295</td>
+      <td>112.110001</td>
+      <td>147594200.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014/12</td>
+      <td>320.192993</td>
+      <td>5.531023e+08</td>
+      <td>339.188499</td>
+      <td>341.248923</td>
+      <td>113.580002</td>
+      <td>153722200.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015/01</td>
+      <td>217.464005</td>
+      <td>1.098812e+09</td>
+      <td>278.326252</td>
+      <td>305.881804</td>
+      <td>123.449997</td>
+      <td>198034100.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015/02</td>
+      <td>254.263000</td>
+      <td>7.115187e+08</td>
+      <td>266.294626</td>
+      <td>291.133574</td>
+      <td>116.160004</td>
+      <td>125686200.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022/01</td>
+      <td>38483.125000</td>
+      <td>9.239790e+11</td>
+      <td>44519.703176</td>
+      <td>46247.967191</td>
+      <td>168.089996</td>
+      <td>211125100.0</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022/02</td>
+      <td>43193.234375</td>
+      <td>6.713360e+11</td>
+      <td>43856.468776</td>
+      <td>45375.186387</td>
+      <td>178.380005</td>
+      <td>254601300.0</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022/03</td>
+      <td>45538.675781</td>
+      <td>8.309438e+11</td>
+      <td>44697.572278</td>
+      <td>45421.897642</td>
+      <td>180.649994</td>
+      <td>377087100.0</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022/04</td>
+      <td>37714.875000</td>
+      <td>8.301159e+11</td>
+      <td>41206.223639</td>
+      <td>43219.891173</td>
+      <td>176.910004</td>
+      <td>195346400.0</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>2022/05</td>
+      <td>31792.310547</td>
+      <td>1.105689e+12</td>
+      <td>36499.267093</td>
+      <td>39954.868137</td>
+      <td>171.139999</td>
+      <td>179902200.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 7 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now i'm going to generate the dependant/target variable that i'm going to try and predict</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'Next Month Close'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Close'</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Close</th>
+      <th>Volume</th>
+      <th>ema3</th>
+      <th>ema6</th>
+      <th>Gold Close</th>
+      <th>Gold Volume</th>
+      <th>Next Month Close</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014/10</td>
+      <td>338.321014</td>
+      <td>9.029944e+08</td>
+      <td>338.321014</td>
+      <td>338.321014</td>
+      <td>112.660004</td>
+      <td>155183900.0</td>
+      <td>378.046997</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014/11</td>
+      <td>378.046997</td>
+      <td>6.597334e+08</td>
+      <td>358.184006</td>
+      <td>349.671295</td>
+      <td>112.110001</td>
+      <td>147594200.0</td>
+      <td>320.192993</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014/12</td>
+      <td>320.192993</td>
+      <td>5.531023e+08</td>
+      <td>339.188499</td>
+      <td>341.248923</td>
+      <td>113.580002</td>
+      <td>153722200.0</td>
+      <td>217.464005</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015/01</td>
+      <td>217.464005</td>
+      <td>1.098812e+09</td>
+      <td>278.326252</td>
+      <td>305.881804</td>
+      <td>123.449997</td>
+      <td>198034100.0</td>
+      <td>254.263000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015/02</td>
+      <td>254.263000</td>
+      <td>7.115187e+08</td>
+      <td>266.294626</td>
+      <td>291.133574</td>
+      <td>116.160004</td>
+      <td>125686200.0</td>
+      <td>244.223999</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022/01</td>
+      <td>38483.125000</td>
+      <td>9.239790e+11</td>
+      <td>44519.703176</td>
+      <td>46247.967191</td>
+      <td>168.089996</td>
+      <td>211125100.0</td>
+      <td>43193.234375</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022/02</td>
+      <td>43193.234375</td>
+      <td>6.713360e+11</td>
+      <td>43856.468776</td>
+      <td>45375.186387</td>
+      <td>178.380005</td>
+      <td>254601300.0</td>
+      <td>45538.675781</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022/03</td>
+      <td>45538.675781</td>
+      <td>8.309438e+11</td>
+      <td>44697.572278</td>
+      <td>45421.897642</td>
+      <td>180.649994</td>
+      <td>377087100.0</td>
+      <td>37714.875000</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022/04</td>
+      <td>37714.875000</td>
+      <td>8.301159e+11</td>
+      <td>41206.223639</td>
+      <td>43219.891173</td>
+      <td>176.910004</td>
+      <td>195346400.0</td>
+      <td>31792.310547</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>2022/05</td>
+      <td>31792.310547</td>
+      <td>1.105689e+12</td>
+      <td>36499.267093</td>
+      <td>39954.868137</td>
+      <td>171.139999</td>
+      <td>179902200.0</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 8 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">btc_close</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Close'</span><span class="p">]</span> <span class="c1">#But i'll save the close price just incase i need it </span>
+
+<span class="c1">#Then i'll remove the previous month btc close price so that i'm left with only the relevant data that i need</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">'Close'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="c1">#Now i should have a good clean dataframe ready for some EDA</span>
+<span class="n">Df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Volume</th>
+      <th>ema3</th>
+      <th>ema6</th>
+      <th>Gold Close</th>
+      <th>Gold Volume</th>
+      <th>Next Month Close</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014/10</td>
+      <td>9.029944e+08</td>
+      <td>338.321014</td>
+      <td>338.321014</td>
+      <td>112.660004</td>
+      <td>155183900.0</td>
+      <td>378.046997</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014/11</td>
+      <td>6.597334e+08</td>
+      <td>358.184006</td>
+      <td>349.671295</td>
+      <td>112.110001</td>
+      <td>147594200.0</td>
+      <td>320.192993</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014/12</td>
+      <td>5.531023e+08</td>
+      <td>339.188499</td>
+      <td>341.248923</td>
+      <td>113.580002</td>
+      <td>153722200.0</td>
+      <td>217.464005</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015/01</td>
+      <td>1.098812e+09</td>
+      <td>278.326252</td>
+      <td>305.881804</td>
+      <td>123.449997</td>
+      <td>198034100.0</td>
+      <td>254.263000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015/02</td>
+      <td>7.115187e+08</td>
+      <td>266.294626</td>
+      <td>291.133574</td>
+      <td>116.160004</td>
+      <td>125686200.0</td>
+      <td>244.223999</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>2021/12</td>
+      <td>9.570472e+11</td>
+      <td>50556.281353</td>
+      <td>49353.904068</td>
+      <td>170.960007</td>
+      <td>151214100.0</td>
+      <td>38483.125000</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022/01</td>
+      <td>9.239790e+11</td>
+      <td>44519.703176</td>
+      <td>46247.967191</td>
+      <td>168.089996</td>
+      <td>211125100.0</td>
+      <td>43193.234375</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022/02</td>
+      <td>6.713360e+11</td>
+      <td>43856.468776</td>
+      <td>45375.186387</td>
+      <td>178.380005</td>
+      <td>254601300.0</td>
+      <td>45538.675781</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022/03</td>
+      <td>8.309438e+11</td>
+      <td>44697.572278</td>
+      <td>45421.897642</td>
+      <td>180.649994</td>
+      <td>377087100.0</td>
+      <td>37714.875000</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022/04</td>
+      <td>8.301159e+11</td>
+      <td>41206.223639</td>
+      <td>43219.891173</td>
+      <td>176.910004</td>
+      <td>195346400.0</td>
+      <td>31792.310547</td>
+    </tr>
+  </tbody>
+</table>
+<p>91 rows × 7 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Explanatory-Data-Analysis">
+<a class="anchor" href="#Explanatory-Data-Analysis" aria-hidden="true"><span class="octicon octicon-link"></span></a>Explanatory Data Analysis<a class="anchor-link" href="#Explanatory-Data-Analysis"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Intuitley I know that traders like to use the ema lines and volume to predict BTC price. 
+But as I mentioned before here I get the chance to explore whether gold price and its volume can help predict BTC price.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="The-Pearson-correlation-coefficient-and-p-value">
+<a class="anchor" href="#The-Pearson-correlation-coefficient-and-p-value" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Pearson correlation coefficient and p value<a class="anchor-link" href="#The-Pearson-correlation-coefficient-and-p-value"> </a>
+</h3>
+<h4 id="Pearson-Correlation:">
+<a class="anchor" href="#Pearson-Correlation:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pearson Correlation:<a class="anchor-link" href="#Pearson-Correlation:"> </a>
+</h4>
+<p>Correlation between sets of data is a measure of how well they are related. The most common measure of correlation in stats is the Pearson Correlation.The full name is the Pearson Product Moment Correlation (PPMC). It shows the linear relationship between two sets of data. In simple terms, it answers the question, Can I draw a line graph to represent the data?</p>
+<p>It is a number between –1 and 1 that measures the strength and direction of the relationship between two variables, where:
+    </p>
+<li>
+<b>1</b>: Perfect positive linear correlation.</li>
+    <li>
+<b>0</b>: No linear correlation, the two variables most likely do not affect each other.</li>
+    <li>
+<b>-1</b>: Perfect negative linear correlation.</li>
+<h4 id="P-Value:">
+<a class="anchor" href="#P-Value:" aria-hidden="true"><span class="octicon octicon-link"></span></a>P-Value:<a class="anchor-link" href="#P-Value:"> </a>
+</h4>
+<p>A p-value measures the probability of obtaining the observed results, assuming that the null hypothesis is true. The lower the p-value, the greater the statistical significance of the observed difference. A p-value of 0.05 or lower is generally considered statistically significant which means that we are 95% confident that the correlation between the variables is significant.</p>
+<p>By convention, when the</p>
+<ul>
+    <li>p-value is &lt; 0.001: we say there is strong evidence that the correlation is significant.</li>
+    <li>the p-value is &lt; 0.05: there is moderate evidence that the correlation is significant.</li>
+    <li>the p-value is &lt; 0.1: there is weak evidence that the correlation is significant.</li>
+    <li>the p-value is &gt; 0.1: there is no evidence that the correlation is significant.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Two things keeps to keep in mind when interprating the results:</p>
+<ul>
+    <li>The null hypothesis is that the two variables are uncorrelated .</li>
+    <li>The p value is in scientific notation, it's decimal form is e.g 4.2e-7 = 0.00000042.</li>
+</ul>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#I will start form the second last row to avoid errors bcz of nan value </span>
+<span class="n">pearson_coef</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'Gold Close'</span><span class="p">][:</span><span class="mi">90</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Next Month Close'</span><span class="p">][:</span><span class="mi">90</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Pearson Correlation Coefficient is"</span><span class="p">,</span> <span class="n">pearson_coef</span><span class="p">,</span> <span class="s2">" with a P-value of P ="</span><span class="p">,</span> <span class="n">p_value</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The Pearson Correlation Coefficient is 0.7706711768570538  with a P-value of P = 6.555477090301474e-19
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this case,</p>
+<p>The p-value is &lt; 0.001 hence, there is strong evidence that the correlation between gold price and BTC price is statistically significant, and the linear relationship is quite strong (0.77, close to 1)</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pearson_coef</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'Gold Volume'</span><span class="p">][:</span><span class="mi">90</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Next Month Close'</span><span class="p">][:</span><span class="mi">90</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Pearson Correlation Coefficient is"</span><span class="p">,</span> <span class="n">pearson_coef</span><span class="p">,</span> <span class="s2">" with a P-value of P ="</span><span class="p">,</span> <span class="n">p_value</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The Pearson Correlation Coefficient is 0.08476385450593574  with a P-value of P = 0.42700282567060693
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The p-value is &lt; 0.001 hence, there is moderate evidence that the correlation between gold volume and BTC price is statistically significant, and there is no linear relationship (0.08, almost 0)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Visually we can see that there is almost no linear relationship between gold volume and btc price</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'Gold Volume'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'Next Month Close'</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span>
+    <span class="n">trendline</span><span class="o">=</span><span class="s1">'ols'</span><span class="p">,</span> <span class="n">trendline_color_override</span><span class="o">=</span><span class="s1">'firebrick'</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">template</span> <span class="o">=</span> <span class="s2">"plotly_dark"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>                            <div id="ff2582fc-e274-4003-841e-74bc784b0014" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("ff2582fc-e274-4003-841e-74bc784b0014")) {                    Plotly.newPlot(                        "ff2582fc-e274-4003-841e-74bc784b0014",                        [{"hovertemplate":"Gold Volume=%{x}<br>Next Month Close=%{y}<extra></extra>","legendgroup":"","marker":{"color":"#636efa","opacity":0.65,"symbol":"circle"},"mode":"markers","name":"","orientation":"v","showlegend":false,"x":[155183900.0,147594200.0,153722200.0,198034100.0,125686200.0,133483100.0,106636600.0,99097100.0,110267600.0,157498100.0,151171700.0,113791100.0,131532500.0,106869000.0,124503700.0,139712800.0,314968700.0,259670200.0,222989100.0,201083100.0,307601400.0,259546000.0,215783900.0,213473800.0,181298100.0,247890600.0,159862800.0,150545100.0,150265000.0,172556100.0,176157400.0,160072400.0,160832400.0,128516200.0,179580900.0,174234300.0,137821900.0,121999200.0,145856700.0,184868100.0,176366400.0,143350600.0,148538100.0,136939000.0,133529400.0,130595500.0,148356600.0,97355900.0,228476300.0,186729200.0,178898300.0,195173300.0,141982900.0,168879600.0,124262100.0,140574200.0,205599200.0,226367100.0,322877500.0,233678500.0,178417600.0,139229300.0,121345200.0,194652300.0,254781400.0,457459900.0,260294400.0,235361000.0,222122700.0,305156400.0,389593200.0,219862100.0,172289000.0,222246500.0,177576400.0,210951400.0,181008600.0,214111100.0,143030700.0,199082500.0,207522500.0,145195500.0,165504300.0,160613200.0,136138300.0,162163400.0,151214100.0,211125100.0,254601300.0,377087100.0,195346400.0,179902200.0],"xaxis":"x","y":[378.0469970703125,320.1929931640625,217.46400451660156,254.26300048828125,244.2239990234375,236.14500427246094,230.19000244140625,263.0719909667969,284.6499938964844,230.05599975585938,236.05999755859375,314.1659851074219,377.3210144042969,430.5669860839844,368.7669982910156,437.6969909667969,416.72900390625,448.3179931640625,531.385986328125,673.3369750976562,624.6810302734375,575.4719848632812,609.7349853515625,700.9719848632812,745.6909790039062,963.7429809570312,970.4030151367188,1179.969970703125,1071.7900390625,1347.8900146484375,2286.409912109375,2480.840087890625,2875.340087890625,4703.39013671875,4338.7099609375,6468.39990234375,10233.599609375,14156.400390625,10221.099609375,10397.900390625,6973.52978515625,9240.5498046875,7494.169921875,6404.0,7780.43994140625,7037.580078125,6625.56005859375,6317.60986328125,4017.2685546875,3742.700439453125,3457.792724609375,3854.785400390625,4105.404296875,5350.7265625,8574.501953125,10817.1552734375,10085.6279296875,9630.6640625,8293.8681640625,9199.5849609375,7569.6298828125,7193.59912109375,9350.529296875,8599.5087890625,6438.64453125,8658.5537109375,9461.05859375,9137.9931640625,11323.466796875,11680.8203125,10784.4912109375,13780.9951171875,19625.8359375,29001.720703125,33114.359375,45137.76953125,58918.83203125,57750.17578125,37332.85546875,35040.8359375,41626.1953125,47166.6875,43790.89453125,61318.95703125,57005.42578125,46306.4453125,38483.125,43193.234375,45538.67578125,37714.875,31792.310546875,null],"yaxis":"y","type":"scatter"},{"hovertemplate":"<b>OLS trendline</b><br>Next Month Close = 2.21725e-05 * Gold Volume + 8479.34<br>R<sup>2</sup>=0.007398<br><br>Gold Volume=%{x}<br>Next Month Close=%{y} <b>(trend)</b><extra></extra>","legendgroup":"","line":{"color":"firebrick"},"marker":{"color":"#636efa","symbol":"circle"},"mode":"lines","name":"","showlegend":false,"x":[97355900.0,99097100.0,106636600.0,106869000.0,110267600.0,113791100.0,121345200.0,121999200.0,124262100.0,124503700.0,125686200.0,128516200.0,130595500.0,131532500.0,133483100.0,133529400.0,136138300.0,136939000.0,137821900.0,139229300.0,139712800.0,140574200.0,141982900.0,143030700.0,143350600.0,145195500.0,145856700.0,147594200.0,148356600.0,148538100.0,150265000.0,150545100.0,151171700.0,151214100.0,153722200.0,155183900.0,157498100.0,159862800.0,160072400.0,160613200.0,160832400.0,162163400.0,165504300.0,168879600.0,172289000.0,172556100.0,174234300.0,176157400.0,176366400.0,177576400.0,178417600.0,178898300.0,179580900.0,181008600.0,181298100.0,184868100.0,186729200.0,194652300.0,195173300.0,195346400.0,198034100.0,199082500.0,201083100.0,205599200.0,207522500.0,210951400.0,211125100.0,213473800.0,214111100.0,215783900.0,219862100.0,222122700.0,222246500.0,222989100.0,226367100.0,228476300.0,233678500.0,235361000.0,247890600.0,254601300.0,254781400.0,259546000.0,259670200.0,260294400.0,305156400.0,307601400.0,314968700.0,322877500.0,377087100.0,389593200.0,457459900.0],"xaxis":"x","y":[10637.962009194842,10676.568809003677,10843.738558118486,10848.891452832231,10924.246994889607,11002.371885267754,11169.865353241516,11184.366184320645,11234.540390205902,11239.897272145838,11266.11628246857,11328.86452704645,11374.96785741775,11395.743512954667,11438.993239411771,11440.019827300095,11497.865726692047,11515.619267127917,11535.19538908474,11566.401000186826,11577.121415824071,11596.220828502297,11627.455263886346,11650.687635147371,11657.780625762376,11698.686716370761,11713.347189626906,11751.871951094772,11768.776283839004,11772.80059705133,11811.090329758586,11817.300853895076,11831.194157800554,11832.134272842992,11887.745181756694,11920.154760943791,11971.4664173403,12023.897786228395,12028.545147381585,12040.536048677597,12045.39626606681,12074.907896290539,12148.984083679314,12223.82300591384,12299.418011236743,12305.340292553617,12342.550223313545,12385.19020534454,12389.824262982977,12416.653017731822,12435.304545413415,12445.962877981821,12461.097843264104,12492.753556615282,12499.172502482877,12578.328415254266,12619.59370076094,12795.26883030687,12806.820715616082,12810.658779621888,12870.251873951205,12893.49754872698,12937.855901413377,13037.989239695411,13080.633656231323,13156.661025783651,13160.512393304209,13212.58900179893,13226.719551717473,13263.809750844637,13354.23374061054,13404.356949689249,13407.101908232975,13423.567224990406,13498.466013041314,13545.232301897733,13660.578209298099,13697.883481913745,13975.696345964268,14124.489506702346,14128.482778380254,14234.125989021864,14236.879816575423,14250.719906421893,15245.423704391065,15299.635527003402,15462.987167384532,15638.345229828887,16840.308918616494,17117.600728339246,18622.376802647894],"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Gold Volume"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Next Month Close"}},"legend":{"tracegroupgap":0},"margin":{"t":60}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('ff2582fc-e274-4003-841e-74bc784b0014');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So we now know that we can use gold price but not its volume, it would have destroyed value and it wouldn't have added anything to the model if anything it would have probably ruined our prediction</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">'Gold Volume'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Volume</th>
+      <th>ema3</th>
+      <th>ema6</th>
+      <th>Gold Close</th>
+      <th>Next Month Close</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2014/10</td>
+      <td>9.029944e+08</td>
+      <td>338.321014</td>
+      <td>338.321014</td>
+      <td>112.660004</td>
+      <td>378.046997</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2014/11</td>
+      <td>6.597334e+08</td>
+      <td>358.184006</td>
+      <td>349.671295</td>
+      <td>112.110001</td>
+      <td>320.192993</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2014/12</td>
+      <td>5.531023e+08</td>
+      <td>339.188499</td>
+      <td>341.248923</td>
+      <td>113.580002</td>
+      <td>217.464005</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2015/01</td>
+      <td>1.098812e+09</td>
+      <td>278.326252</td>
+      <td>305.881804</td>
+      <td>123.449997</td>
+      <td>254.263000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2015/02</td>
+      <td>7.115187e+08</td>
+      <td>266.294626</td>
+      <td>291.133574</td>
+      <td>116.160004</td>
+      <td>244.223999</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>What about the the other indipendant variables?</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'EMA 3'</span><span class="p">)</span>
+<span class="n">pearson_coef</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'ema3'</span><span class="p">][:</span><span class="mi">90</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Next Month Close'</span><span class="p">][:</span><span class="mi">90</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Pearson Correlation Coefficient is"</span><span class="p">,</span> <span class="n">pearson_coef</span><span class="p">,</span> <span class="s2">" with a P-value of P ="</span><span class="p">,</span> <span class="n">p_value</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">EMA 6'</span><span class="p">)</span>
+<span class="n">pearson_coef</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'ema6'</span><span class="p">][:</span><span class="mi">90</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Next Month Close'</span><span class="p">][:</span><span class="mi">90</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Pearson Correlation Coefficient is"</span><span class="p">,</span> <span class="n">pearson_coef</span><span class="p">,</span> <span class="s2">" with a P-value of P ="</span><span class="p">,</span> <span class="n">p_value</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Volume'</span><span class="p">)</span>
+<span class="n">pearson_coef</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'Volume'</span><span class="p">][:</span><span class="mi">90</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Next Month Close'</span><span class="p">][:</span><span class="mi">90</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Pearson Correlation Coefficient is"</span><span class="p">,</span> <span class="n">pearson_coef</span><span class="p">,</span> <span class="s2">" with a P-value of P ="</span><span class="p">,</span> <span class="n">p_value</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>EMA 3
+The Pearson Correlation Coefficient is 0.9518278081533298  with a P-value of P = 5.913915911148407e-47
+
+EMA 6
+The Pearson Correlation Coefficient is 0.9357719658423489  with a P-value of P = 1.3124438502636034e-41
+
+Volume
+The Pearson Correlation Coefficient is 0.7995337431531997  with a P-value of P = 3.465784507142274e-21
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The other indipendant variables are all statistically significant, and their linear relationship are very strong with p-values of &lt; 0.001</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="NOTE:">
+<a class="anchor" href="#NOTE:" aria-hidden="true"><span class="octicon octicon-link"></span></a>NOTE:<a class="anchor-link" href="#NOTE:"> </a>
+</h4>
+<p>Causation is the relationship between cause and effect between two variables.</p>
+<p>It is important to know the difference between correlation and causation. Correlation does not imply causation. Determining correlation is much simpler  than determining causation as causation may require independent experimentation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Model-Development">
+<a class="anchor" href="#Model-Development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model Development<a class="anchor-link" href="#Model-Development"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Before we continue let's clarify the objective again: I'm using the 3 and 6 month ema, BTC previous month volume, and Gold close price of the preceding month to predict what BTC close price of the impending month</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">Df</span><span class="p">[[</span><span class="s1">'ema3'</span><span class="p">,</span><span class="s1">'ema6'</span><span class="p">,</span><span class="s1">'Volume'</span><span class="p">,</span><span class="s1">'Gold Close'</span><span class="p">]]</span>
+
+<span class="c1"># Define the dependent variable</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Df</span><span class="p">[</span><span class="s1">'Next Month Close'</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I am going to spilt the data, 80% of the data will be used to train the model and 20% will be used to test the prediction made from that 80%</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="o">.</span><span class="mi">8</span>
+<span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">Df</span><span class="p">))</span>
+
+<span class="c1"># Train dataset</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">t</span><span class="p">]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">t</span><span class="p">]</span>
+
+<span class="c1"># Test dataset</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">t</span><span class="p">:]</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">t</span><span class="p">:]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"number of test samples :"</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"number of training samples:"</span><span class="p">,</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>number of test samples : 19
+number of training samples: 72
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reg</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">reg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>LinearRegression()</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The constant came back negative which is confusing but i'll get back to this later</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reg</span><span class="o">.</span><span class="n">intercept_</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>-1262.8899087871669</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">coeff_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">coef_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'Coefficient'</span><span class="p">])</span> 
+<span class="n">coeff_df</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Coefficient</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ema3</th>
+      <td>1.777304e+00</td>
+    </tr>
+    <tr>
+      <th>ema6</th>
+      <td>-9.488261e-01</td>
+    </tr>
+    <tr>
+      <th>Volume</th>
+      <td>9.555041e-10</td>
+    </tr>
+    <tr>
+      <th>Gold Close</th>
+      <td>1.521999e+01</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The Multiple linear regression formula:</p>
+<h4 id="$$-y-=-β_{0}-\;+-\;β_{1}-*-\;X_{1}-+-\;β_{2}-*-\;X_{2}-+-\;β_{3}-*-\;X_{3}-+-\;β_{4}-*-\;X_{4}$$">
+<a class="anchor" href="#%24%24-y-=-%CE%B2_%7B0%7D-%5C;+-%5C;%CE%B2_%7B1%7D-*-%5C;X_%7B1%7D-+-%5C;%CE%B2_%7B2%7D-*-%5C;X_%7B2%7D-+-%5C;%CE%B2_%7B3%7D-*-%5C;X_%7B3%7D-+-%5C;%CE%B2_%7B4%7D-*-%5C;X_%7B4%7D%24%24" aria-hidden="true"><span class="octicon octicon-link"></span></a>$$ y = β_{0} \;+ \;β_{1} * \;X_{1} + \;β_{2} * \;X_{2} + \;β_{3} * \;X_{3} + \;β_{4} * \;X_{4}$$<a class="anchor-link" href="#%24%24-y-=-%CE%B2_%7B0%7D-%5C;+-%5C;%CE%B2_%7B1%7D-*-%5C;X_%7B1%7D-+-%5C;%CE%B2_%7B2%7D-*-%5C;X_%7B2%7D-+-%5C;%CE%B2_%7B3%7D-*-%5C;X_%7B3%7D-+-%5C;%CE%B2_%7B4%7D-*-%5C;X_%7B4%7D%24%24"> </a>
+</h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Linear Regression model"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"BTC Price (y) = </span><span class="si">%.2f</span><span class="s2"> (constant) + </span><span class="si">%.2f</span><span class="s2"> * EM3 (x1) + </span><span class="si">%.2f</span><span class="s2"> * EMA6 (x2) + </span><span class="si">%.4f</span><span class="s2"> * Volume (x3) + </span><span class="si">%.2f</span><span class="s2"> * Gold Close (x4)"</span> <span class="o">%</span> <span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">intercept_</span><span class="p">,</span><span class="n">reg</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reg</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">reg</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">reg</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Linear Regression model
+BTC Price (y) = -1262.89 (constant) + 1.78 * EM3 (x1) + -0.95 * EMA6 (x2) + 0.0000 * Volume (x3) + 15.22 * Gold Close (x4)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Model-Evaluation">
+<a class="anchor" href="#Model-Evaluation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model Evaluation<a class="anchor-link" href="#Model-Evaluation"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this step, I will evaluate the model's accuracy but before that happens I'm going to make the predictions first</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predicted_price</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The R square is 0.05 which means the model’s predicitive power is poor in fact it is worse than what I expected it predicts little to nothing of the target variable</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_r2_score</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">predicted_price</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The test R-square is: '</span><span class="p">,</span> <span class="n">test_r2_score</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The test R-square is:  0.053315838215583056
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I will also look at other evaluation methods</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_r2_score</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">predicted_price</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The test R-square is: '</span><span class="p">,</span> <span class="n">test_r2_score</span><span class="p">)</span>
+
+<span class="n">test_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predicted_price</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The test mean square error of target variable and predicted value is: '</span><span class="p">,</span> <span class="n">test_mse</span><span class="p">)</span>
+
+<span class="n">test_mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predicted_price</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The test mean absolute error of target variable and predicted value is: '</span><span class="p">,</span> <span class="n">test_mae</span><span class="p">)</span>
+
+<span class="n">test_rmse</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">test_mse</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The test root mean square error of target variable and predicted value is: '</span><span class="p">,</span> <span class="n">test_rmse</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The test R-square is:  0.053315838215583056
+The test mean square error of target variable and predicted value is:  107191024.05803142
+The test mean absolute error of target variable and predicted value is:  8821.373009960726
+The test root mean square error of target variable and predicted value is:  10353.309811747711
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Mean Square Error (MSE) is the average difference of actual values and predicted values
+There is no correct value for MSE. Simply put, the lower the value the better, and 0 means the model is perfect.</p>
+<p>Mean Absolute Error (MAE) is the sum of the absolute difference between actual and predicted values in this case the average difference is $8821</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I'm going to evaluate further and try to see what other insights I can gather from the predicted price
+I'll start by creating a data frame and add the predicted price and actual price so that I can plot the prices side by side</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">btc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<span class="c1">#btc['Close Previous Month'] = btc_close[t:]</span>
+<span class="n">btc</span><span class="p">[</span><span class="s1">'Date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">Df</span><span class="p">[</span><span class="s1">'Date'</span><span class="p">][</span><span class="n">t</span><span class="p">:]</span>
+<span class="n">btc</span><span class="p">[</span><span class="s1">'Predicted Close'</span><span class="p">]</span> <span class="o">=</span> <span class="n">predicted_price</span>
+<span class="n">btc</span><span class="p">[</span><span class="s1">'Actual Close'</span><span class="p">]</span> <span class="o">=</span> <span class="n">btc_close</span><span class="p">[</span><span class="n">t</span><span class="p">:]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="c1">#btc['Close Previous Month'].shift(-1)</span>
+<span class="n">btc</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Predicted Close</th>
+      <th>Actual Close</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>72</th>
+      <td>2020/10</td>
+      <td>13607.631908</td>
+      <td>19625.835938</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>2020/11</td>
+      <td>17737.624104</td>
+      <td>29001.720703</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>2020/12</td>
+      <td>25451.933856</td>
+      <td>33114.359375</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>2021/01</td>
+      <td>31623.812022</td>
+      <td>45137.769531</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>2021/02</td>
+      <td>40797.895059</td>
+      <td>58918.832031</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>2021/03</td>
+      <td>52011.667637</td>
+      <td>57750.175781</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>2021/04</td>
+      <td>55687.583652</td>
+      <td>37332.855469</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>2021/05</td>
+      <td>43935.783612</td>
+      <td>35040.835938</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>2021/06</td>
+      <td>35882.237824</td>
+      <td>41626.195312</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>2021/07</td>
+      <td>36483.673993</td>
+      <td>47166.687500</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>2021/08</td>
+      <td>40423.918840</td>
+      <td>43790.894531</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>2021/09</td>
+      <td>39815.250546</td>
+      <td>61318.957031</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>2021/10</td>
+      <td>50330.042450</td>
+      <td>57005.425781</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>2021/11</td>
+      <td>51684.668062</td>
+      <td>46306.445312</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>2021/12</td>
+      <td>45279.181353</td>
+      <td>38483.125000</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022/01</td>
+      <td>37422.063673</td>
+      <td>43193.234375</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022/02</td>
+      <td>36986.624235</td>
+      <td>45538.675781</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022/03</td>
+      <td>38624.254997</td>
+      <td>37714.875000</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022/04</td>
+      <td>34450.675253</td>
+      <td>31792.310547</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">btc</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">"Date"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">btc</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>              
+              <span class="n">title</span><span class="o">=</span><span class="s1">'Predicted Close Vs Actual Close'</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span>
+    <span class="n">rangeslider_visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">rangeselector</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">buttons</span><span class="o">=</span><span class="nb">list</span><span class="p">([</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"1m"</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">"month"</span><span class="p">,</span> <span class="n">stepmode</span><span class="o">=</span><span class="s2">"backward"</span><span class="p">),</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"6m"</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">"month"</span><span class="p">,</span> <span class="n">stepmode</span><span class="o">=</span><span class="s2">"backward"</span><span class="p">),</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"YTD"</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">"year"</span><span class="p">,</span> <span class="n">stepmode</span><span class="o">=</span><span class="s2">"todate"</span><span class="p">),</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"1y"</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">"year"</span><span class="p">,</span> <span class="n">stepmode</span><span class="o">=</span><span class="s2">"backward"</span><span class="p">),</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="s2">"all"</span><span class="p">)</span>
+        <span class="p">])</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">template</span> <span class="o">=</span> <span class="s2">"plotly_dark"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<div>                            <div id="c75ac71f-469d-4dbf-b874-45e94023e2b5" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("c75ac71f-469d-4dbf-b874-45e94023e2b5")) {                    Plotly.newPlot(                        "c75ac71f-469d-4dbf-b874-45e94023e2b5",                        [{"hovertemplate":"variable=Predicted Close<br>Date=%{x}<br>value=%{y}<extra></extra>","legendgroup":"Predicted Close","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Predicted Close","orientation":"v","showlegend":true,"x":["2020/10","2020/11","2020/12","2021/01","2021/02","2021/03","2021/04","2021/05","2021/06","2021/07","2021/08","2021/09","2021/10","2021/11","2021/12","2022/01","2022/02","2022/03","2022/04"],"xaxis":"x","y":[13607.631908067066,17737.624103572693,25451.933855554722,31623.812022417726,40797.89505897185,52011.66763684453,55687.58365186467,43935.783612333355,35882.23782412857,36483.673992760276,40423.918840004764,39815.25054574614,50330.04245025116,51684.668061937395,45279.1813533945,37422.06367279034,36986.62423479006,38624.25499655667,34450.67525281707],"yaxis":"y","type":"scatter"},{"hovertemplate":"variable=Actual Close<br>Date=%{x}<br>value=%{y}<extra></extra>","legendgroup":"Actual Close","line":{"color":"#EF553B","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Actual Close","orientation":"v","showlegend":true,"x":["2020/10","2020/11","2020/12","2021/01","2021/02","2021/03","2021/04","2021/05","2021/06","2021/07","2021/08","2021/09","2021/10","2021/11","2021/12","2022/01","2022/02","2022/03","2022/04"],"xaxis":"x","y":[19625.8359375,29001.720703125,33114.359375,45137.76953125,58918.83203125,57750.17578125,37332.85546875,35040.8359375,41626.1953125,47166.6875,43790.89453125,61318.95703125,57005.42578125,46306.4453125,38483.125,43193.234375,45538.67578125,37714.875,31792.310546875],"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Date"},"rangeslider":{"visible":true},"rangeselector":{"buttons":[{"count":1,"label":"1m","step":"month","stepmode":"backward"},{"count":6,"label":"6m","step":"month","stepmode":"backward"},{"count":1,"label":"YTD","step":"year","stepmode":"todate"},{"count":1,"label":"1y","step":"year","stepmode":"backward"},{"step":"all"}]}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"value"}},"legend":{"title":{"text":"variable"},"tracegroupgap":0},"title":{"text":"Predicted Close Vs Actual Close"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('c75ac71f-469d-4dbf-b874-45e94023e2b5');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We have already seen the mean of these residuals (mean squared error), now I'll look at the residuals of each month in absolute and in % to see how far off are the predictions for each month
+(Remember, the residual is the difference between the observed value and the estimated value)</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">btc</span><span class="p">[</span><span class="s1">'Residual'</span><span class="p">]</span> <span class="o">=</span> <span class="n">btc_close</span><span class="p">[</span><span class="n">t</span><span class="p">:]</span> <span class="o">-</span> <span class="n">btc</span><span class="p">[</span><span class="s1">'Actual Close'</span><span class="p">]</span> <span class="c1">#The difference in absolute $ terms</span>
+<span class="n">btc</span><span class="p">[</span><span class="s1">'Residual in %'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">btc</span><span class="p">[</span><span class="s1">'Residual'</span><span class="p">]</span><span class="o">/</span><span class="n">btc</span><span class="p">[</span><span class="s1">'Actual Close'</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span> <span class="c1">#The difference in % </span>
+<span class="n">btc</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Date</th>
+      <th>Predicted Close</th>
+      <th>Actual Close</th>
+      <th>Residual</th>
+      <th>Residual in %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>72</th>
+      <td>2020/10</td>
+      <td>13607.631908</td>
+      <td>19625.835938</td>
+      <td>-5844.840820</td>
+      <td>29.781360</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>2020/11</td>
+      <td>17737.624104</td>
+      <td>29001.720703</td>
+      <td>-9375.884766</td>
+      <td>32.328719</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>2020/12</td>
+      <td>25451.933856</td>
+      <td>33114.359375</td>
+      <td>-4112.638672</td>
+      <td>12.419502</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>2021/01</td>
+      <td>31623.812022</td>
+      <td>45137.769531</td>
+      <td>-12023.410156</td>
+      <td>26.637138</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>2021/02</td>
+      <td>40797.895059</td>
+      <td>58918.832031</td>
+      <td>-13781.062500</td>
+      <td>23.389911</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>2021/03</td>
+      <td>52011.667637</td>
+      <td>57750.175781</td>
+      <td>1168.656250</td>
+      <td>2.023641</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>2021/04</td>
+      <td>55687.583652</td>
+      <td>37332.855469</td>
+      <td>20417.320312</td>
+      <td>54.689951</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>2021/05</td>
+      <td>43935.783612</td>
+      <td>35040.835938</td>
+      <td>2292.019531</td>
+      <td>6.540996</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>2021/06</td>
+      <td>35882.237824</td>
+      <td>41626.195312</td>
+      <td>-6585.359375</td>
+      <td>15.820229</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>2021/07</td>
+      <td>36483.673993</td>
+      <td>47166.687500</td>
+      <td>-5540.492188</td>
+      <td>11.746621</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>2021/08</td>
+      <td>40423.918840</td>
+      <td>43790.894531</td>
+      <td>3375.792969</td>
+      <td>7.708892</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>2021/09</td>
+      <td>39815.250546</td>
+      <td>61318.957031</td>
+      <td>-17528.062500</td>
+      <td>28.585063</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>2021/10</td>
+      <td>50330.042450</td>
+      <td>57005.425781</td>
+      <td>4313.531250</td>
+      <td>7.566878</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>2021/11</td>
+      <td>51684.668062</td>
+      <td>46306.445312</td>
+      <td>10698.980469</td>
+      <td>23.104733</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>2021/12</td>
+      <td>45279.181353</td>
+      <td>38483.125000</td>
+      <td>7823.320312</td>
+      <td>20.329223</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>2022/01</td>
+      <td>37422.063673</td>
+      <td>43193.234375</td>
+      <td>-4710.109375</td>
+      <td>10.904739</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>2022/02</td>
+      <td>36986.624235</td>
+      <td>45538.675781</td>
+      <td>-2345.441406</td>
+      <td>5.150438</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>2022/03</td>
+      <td>38624.254997</td>
+      <td>37714.875000</td>
+      <td>7823.800781</td>
+      <td>20.744602</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>2022/04</td>
+      <td>34450.675253</td>
+      <td>31792.310547</td>
+      <td>5922.564453</td>
+      <td>18.628921</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you can see from the residual, the difference is pretty large but this is due to BTC being very volatile hence  anything between 7-10% difference (this is subjective based on my observations from BTC trading) could be good but to expect a residual of less than 5% consistently would be very unlikely from an  asset class this volatile</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Conclusion">
+<a class="anchor" href="#Conclusion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Conclusion<a class="anchor-link" href="#Conclusion"> </a>
+</h3>
+<p>If the model had been at least 50-60% accurate (have an R square of 0.50-0.60), I would have proceeded with backtesting and then take the model live by predicting the close price of this month (June 2022)</p>
+<p>The linear regression is not a good model to use when predicting BTC/USD prices, maybe it would've been more efficient in predicting the returns instead. There were many red flags and based on the R square alone I would never take this model live and risk real money on it</p>
+<p>The MSE was way too high and very far from 0 since MSE is a measure of how close a fitted line is to data points</p>
+<p>Another red flag was the constant being negative, This means when the independent variables are 0 the mean price of BTC will be -1262.
+A negative constant doesn't mean the regression made a mistake but rather it's the data being modeled, realistically any security price can go to 0 but no security price can fall below 0 and turn negative, The your position value of that asset can turn negative but not the actual asset price. which is also why I think predicting returns instead of price would have been more accurate and much more realistic</p>
+<p>This is also a good example to showcase how a machine learning model is only as useful as the features selected and in-order to select the right features depends on the knowledge one has of that data set!</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><a class="u-url" href="/Monewmetrics/quantitative%20research/2022/06/01/btc-usd-price-prediction.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Monewmetrics/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Monewmetrics/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Monewmetrics/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Mbarak J Abubakar</li>
+          <li><a class="u-email" href="mailto:mjabubakar22@gmail.com">mjabubakar22@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>Quantitative finance, Quantitative trading and Equity analysis</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/mjabubakar22" target="_blank" title="mjabubakar22"><svg class="svg-icon grey"><use xlink:href="/Monewmetrics/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/mj-abubakar" target="_blank" title="mj-abubakar"><svg class="svg-icon grey"><use xlink:href="/Monewmetrics/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
