@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Foot Locker, A good business at a cheap price?.
-categories: [Equity research and analysis] 
+categories: [Financial Analysis] 
 badges: true
 title: Footlocker Inc Stock Analysis and Valuation
 ---
