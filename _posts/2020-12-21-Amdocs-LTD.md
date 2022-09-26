@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Amdocs LTD To Unlock Value From 5G IoT Connectivity Market.
-categories: [Financial analysis] 
+categories: [Financial Analysis] 
 badges: true
 title: Amdocs Limited Stock Analysis and Valuation
 ---
