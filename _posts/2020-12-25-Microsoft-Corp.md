@@ -1,7 +1,7 @@
 ---
 layout: post
 description: Microsoft's Growth Potential In The Cloud Industry.
-categories: [Equity research and analysis] 
+categories: [Financial Analysis] 
 badges: true
 title: Microsoft Corporation Stock Analysis and Valuation
 ---
