@@ -9,7 +9,8 @@ As a Data Science and finance enthusiast I enjoy working with data as it helps t
 
 Currently, I work in accounting, I don’t have a background in computer science or statistics nor do I have any professional experience as one. I ‘ve learned the basics through different books and courses but I’ve created and used Monewmetrics as a way to not only put to practice what I’ve learnt (and still learning) but also build up on that foundation, hence most of what you’ll encounter throughout the website will be me researching and learning different ideas, models and concepts for the first time.
 
-![mon](https://user-images.githubusercontent.com/80532199/192337324-546aa0e2-f0a1-4579-a5f8-36080a16a68e.png)
+
+![monew](https://user-images.githubusercontent.com/80532199/192338336-13187d8a-9fd3-4e40-89f1-24e4adde3ee7.png)
 
 
 Monewmetrics focuses on 3 areas:
