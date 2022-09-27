@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Descriptive Statistics and relationship between variables | Monewmetrics</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Descriptive Statistics and relationship between variables" />
+<meta name="author" content="Mbarak J Abubakar" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this notebook, we’ll go through some basic concepts that most if not all statisticians and data analysts look at when they first encouter a data set" />
+<meta property="og:description" content="In this notebook, we’ll go through some basic concepts that most if not all statisticians and data analysts look at when they first encouter a data set" />
+<link rel="canonical" href="https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/08/21/Stats1.html" />
+<meta property="og:url" content="https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/08/21/Stats1.html" />
+<meta property="og:site_name" content="Monewmetrics" />
+<meta property="og:image" content="https://mjabubakar22.github.io/Monewmetrics/images/math.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-21T00:00:00-05:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://mjabubakar22.github.io/Monewmetrics/images/math.jpg" />
+<meta property="twitter:title" content="Descriptive Statistics and relationship between variables" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mbarak J Abubakar"},"dateModified":"2022-08-21T00:00:00-05:00","datePublished":"2022-08-21T00:00:00-05:00","description":"In this notebook, we’ll go through some basic concepts that most if not all statisticians and data analysts look at when they first encouter a data set","headline":"Descriptive Statistics and relationship between variables","image":"https://mjabubakar22.github.io/Monewmetrics/images/math.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/08/21/Stats1.html"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://mjabubakar22.github.io/Monewmetrics/images/Monewmetrics.png"},"name":"Mbarak J Abubakar"},"url":"https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/08/21/Stats1.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Monewmetrics/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://mjabubakar22.github.io/Monewmetrics/feed.xml" title="Monewmetrics" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1D7H2V3J89"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1D7H2V3J89');
+</script>
+
+
+<link rel="shortcut icon" type="image/x-icon" href="/Monewmetrics/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper">
+
+    
+    
+    <a class="site-title" href="https://mjabubakar22.github.io/Monewmetrics/">
+      
+        <img src="https://mjabubakar22.github.io/Monewmetrics/images/Monewmetrics.png" class="site-logo" width="auto" height="56">
+      
+    </a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15" width="18px" height="15px">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="https://mjabubakar22.github.io/Monewmetrics/about/">About</a>
+          
+        
+          
+          <a class="page-link" href="https://mjabubakar22.github.io/Monewmetrics/categories/">Categories</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="https://mjabubakar22.github.io/Monewmetrics/search/">Search</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Descriptive Statistics and relationship between variables</h1><p class="page-description">In this notebook, we'll go  through some basic concepts that most if not all statisticians and data analysts look at when they first encouter a data set</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-08-21T00:00:00-05:00" itemprop="datePublished">
+        Aug 21, 2022
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      12 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/Monewmetrics/categories/#Statistics & Probability">Statistics & Probability</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-justify-center">
+          <div class="px-2">
+
+    <a href="https://github.com/mjabubakar22/Monewmetrics/tree/master/_notebooks/2022-08-21-Stats1.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Monewmetrics/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/mjabubakar22/Monewmetrics/master?filepath=_notebooks%2F2022-08-21-Stats1.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Monewmetrics/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/mjabubakar22/Monewmetrics/blob/master/_notebooks/2022-08-21-Stats1.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Monewmetrics/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+          <div class="px-2">
+  <a href="https://deepnote.com/launch?url=https%3A%2F%2Fgithub.com%2Fmjabubakar22%2FMonewmetrics%2Fblob%2Fmaster%2F_notebooks%2F2022-08-21-Stats1.ipynb" target="_blank">
+      <img class="notebook-badge-image" src="/Monewmetrics/assets/badges/deepnote.svg" alt="Launch in Deepnote"/>
+  </a>
+</div>
+
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Measures-of-central-tendency:">Measures of central tendency: </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Mean:">Mean: </a></li>
+<li class="toc-entry toc-h4"><a href="#Weighted-mean:">Weighted mean: </a></li>
+<li class="toc-entry toc-h4"><a href="#Harmonic-mean:">Harmonic mean: </a></li>
+<li class="toc-entry toc-h4"><a href="#Geometric-mean:">Geometric mean: </a></li>
+<li class="toc-entry toc-h4"><a href="#Trimmed-mean:">Trimmed mean: </a></li>
+<li class="toc-entry toc-h4"><a href="#Median:">Median: </a></li>
+<li class="toc-entry toc-h4"><a href="#Mode:">Mode: </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Measures-of-dispersion">Measures of dispersion </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Range:">Range: </a></li>
+<li class="toc-entry toc-h4"><a href="#Variance-sample-and-population:">Variance sample and population: </a></li>
+<li class="toc-entry toc-h4"><a href="#Standard-deviation-sample-and-population:">Standard deviation sample and population: </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Relationship-between-variables">Relationship between variables </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#Covariance">Covariance </a></li>
+<li class="toc-entry toc-h4"><a href="#Correlation-coefficient">Correlation coefficient </a></li>
+<li class="toc-entry toc-h4"><a href="#References">References </a></li>
+</ul>
+</li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2022-08-21-Stats1.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Measures-of-central-tendency:">
+<a class="anchor" href="#Measures-of-central-tendency:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Measures of central tendency:<a class="anchor-link" href="#Measures-of-central-tendency:"> </a>
+</h2>
+<p>A measure of central tendency (also referred to as measures of center or central location) is a summary measure that attempts to describe a whole set of data with a single value that represents the middle or center of its distribution.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Mean:">
+<a class="anchor" href="#Mean:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mean:<a class="anchor-link" href="#Mean:"> </a>
+</h4>
+<p>The arithmetic mean is the sum of the observations divided by the number of observations. The arithmetic mean is by far the most frequently used measure of the middle or center of data. The mean is also referred to as the average
+The population mean, μ, is the arithmetic mean value of a population. For a finite population, the population mean is:</p>
+<p>
+$$\mu = \dfrac{\sum_{i=1}^N X_i}{N} $$
+</p>
+<p>where $N$ is the number of observations in the entire population and $X_i$
+is the $i$th observation.</p>
+<p>The sample mean is the arithmetic mean computed for a sample. A sample is a percentage of the total population in statistics. You can use the data from a sample to make inferences about a population as a whole. The concept of the mean can be applied to the observations in a sample with a slight change in notation.</p>
+<p>
+$$\bar{x} = \dfrac{\sum_{i=1}^n X_i}{n} $$
+</p>
+<p>where $n$ is the number of observations in the sample.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
+<span class="c1">#Downloading </span>
+<span class="n">msft_daily</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'MSFT'</span><span class="p">,</span> <span class="s1">'2016-01-01'</span><span class="p">,</span> <span class="s1">'2021-12-31'</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span> <span class="s1">'1d'</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span> <span class="s1">'Date'</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">'Adj Close'</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[*********************100%***********************]  1 of 1 completed
+The average daily return for Microsoft stock is: 0.14%
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">msft_returns</span> <span class="o">=</span> <span class="n">msft_daily</span><span class="o">.</span><span class="n">pct_change</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">average_return</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">msft_returns</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s1">'%'</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'The average daily return for Microsoft stock is: </span><span class="si">{</span><span class="n">average_return</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Weighted-mean:">
+<a class="anchor" href="#Weighted-mean:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Weighted mean:<a class="anchor-link" href="#Weighted-mean:"> </a>
+</h4>
+<p>The ordinary arithmetic mean is where all sample observations are equally weighted by the factor 1/n (each of the data points contributes equally to the final average).</p>
+<p>But with the weighted mean, some data points contribute more than others based on their weighting, the higher the weighting, the more it influences the final average. The weighted mean is also referred to as the weighted average</p>
+<p>
+$$\bar{X}_w = {\sum_{i=1}^n w_i X_i} $$
+</p>
+<p>where the sum of the weights equals 1; that is,$\sum_{i} w_i = 1$</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">aapl</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'AAPL'</span><span class="p">,</span> <span class="s1">'2021-10-01'</span><span class="p">,</span> <span class="s1">'2021-12-31'</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span> <span class="s1">'1d'</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span> <span class="s1">'Date'</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">'Adj Close'</span><span class="p">]</span>
+<span class="n">nvdia</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'NVDA'</span><span class="p">,</span> <span class="s1">'2021-10-01'</span><span class="p">,</span> <span class="s1">'2021-12-31'</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span> <span class="s1">'1d'</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span> <span class="s1">'Date'</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">'Adj Close'</span><span class="p">]</span>
+<span class="n">msft</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">'MSFT'</span><span class="p">,</span> <span class="s1">'2021-10-01'</span><span class="p">,</span> <span class="s1">'2021-12-31'</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span> <span class="s1">'1d'</span><span class="p">,</span><span class="n">index_col</span> <span class="o">=</span> <span class="s1">'Date'</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">'Adj Close'</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">msft_ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">msft</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">msft</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">msft</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">aapl_ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">aapl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">aapl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">aapl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">nvda_ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">nvdia</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">nvdia</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">aapl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1">#portfolio return if 50% of capital was deplyoed in microsoft,30% in apple and 20% in nvidia</span>
+<span class="n">Wavg</span> <span class="o">=</span> <span class="p">(</span><span class="n">msft_ret</span> <span class="o">*</span> <span class="o">.</span><span class="mi">50</span> <span class="o">+</span> <span class="n">aapl_ret</span> <span class="o">+</span> <span class="o">.</span><span class="mi">30</span> <span class="o">+</span> <span class="n">nvda_ret</span> <span class="o">*</span> <span class="o">.</span><span class="mi">20</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span>
+<span class="n">avg</span> <span class="o">=</span> <span class="p">(</span><span class="n">msft_ret</span> <span class="o">+</span> <span class="n">aapl_ret</span> <span class="o">+</span> <span class="n">nvda_ret</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Weighted mean return of the portfolio assuming a 50/30/20 split is:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">Wavg</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Arithmetic mean return of the portfolio assuming no split is:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">avg</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The Weighted mean return of the portfolio is: -0.09
+The Arithmetic mean return of the portfolio is: -0.25
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The weighted mean is also very useful when calculating a theoretically expected outcome where each outcome has a different probability of occurring (more on this in probability concepts)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Harmonic-mean:">
+<a class="anchor" href="#Harmonic-mean:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Harmonic mean:<a class="anchor-link" href="#Harmonic-mean:"> </a>
+</h4>
+<p>The harmonic mean is a type of numerical average. It is calculated by dividing the number of observations by the reciprocal of each number in the series. Thus, the harmonic mean is the reciprocal of the arithmetic mean of the reciprocals.</p>
+<p>
+$$\bar{X}_h = \dfrac{n}{\sum_{i=1}^n \dfrac1X_i} $$
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Geometric-mean:">
+<a class="anchor" href="#Geometric-mean:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Geometric mean:<a class="anchor-link" href="#Geometric-mean:"> </a>
+</h4>
+<p>The geometric mean is most frequently used to average rates of change over time or to compute the growth rate of a variable.</p>
+<p>For volatile numbers like stock returns, the geometric average provides a far more accurate measurement of the true return by taking into account year-over-year compounding that smooths the average.</p>
+<p>
+$$ G = \sqrt[n]{X_1,X_2,X_3....X_n} $$
+</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="n">msfT</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">Ticker</span><span class="p">(</span><span class="s2">"MSFT"</span><span class="p">)</span>
+<span class="n">dividends</span> <span class="o">=</span> <span class="n">msfT</span><span class="o">.</span><span class="n">dividends</span>
+
+<span class="c1"># Use scipy's gmean&amp;hmean function to compute the geometric mean and harmonic mean</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Harmonic mean of Microsoft's dividends per share is:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">hmean</span><span class="p">(</span><span class="n">dividends</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Geometric mean of Microsoft's dividends per share is:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">gmean</span><span class="p">(</span><span class="n">dividends</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The Arithmetic mean of Microsoft's dividends per share is:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dividends</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The Harmonic mean of Microsoft's dividends per share is: 0.19
+The Geometric mean of Microsoft's dividends per share is: 0.24
+The Arithmetic mean of Microsoft's dividends per share is: 0.32
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p>“A mathematical fact concerning the harmonic, geometric, and arithmetic means is that unless all the observations in a data set have the same value, the harmonic mean is less than the geometric mean, which in turn is less than the arithmetic mean” – Quantitative Investment Analysis, by DeFusco, McLeavey, Pinto, and Runkle</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Trimmed-mean:">
+<a class="anchor" href="#Trimmed-mean:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Trimmed mean:<a class="anchor-link" href="#Trimmed-mean:"> </a>
+</h4>
+<p>A trimmed mean is a method of averaging that removes a small designated percentage of the largest and smallest values before calculating the mean. After removing the specified outlier observations, the trimmed mean is found using a standard arithmetic averaging formula. The use of a trimmed mean helps eliminate the influence of outliers or data points on the tails that may unfairly affect the traditional or arithmetic mean.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To trim the mean by a total of 40%, we remove the lowest 20% and the highest 20% of values, eliminating the scores of 8 and 9</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">trimmed_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">trimmed_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">trimmed_data</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Hence, a mean trimmed at 40% would equal </span><span class="si">{</span><span class="n">trimmed_mean</span><span class="si">}</span><span class="s2"> versus </span><span class="si">{</span><span class="n">mean</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Hence, a mean trimmed at 40% would equal 3.0 versus 5.2
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Median:">
+<a class="anchor" href="#Median:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Median:<a class="anchor-link" href="#Median:"> </a>
+</h4>
+<p>The median is the middle number in a sorted, ascending, or descending list of numbers and can be more descriptive of that data set than the average. It is the point above and below which half (50%) of the observed data falls, and so represents the midpoint of the data.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">median</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">dividends</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'The median dividend per share paid by Microsoft is </span><span class="si">{</span><span class="n">median</span><span class="si">}</span><span class="s1">$'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The median dividend per share paid by Microsoft is 0.23$
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Mode:">
+<a class="anchor" href="#Mode:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mode:<a class="anchor-link" href="#Mode:"> </a>
+</h4>
+<p>The mode is the value that appears most frequently in a data set
+A distribution can have more than one mode or even no mode. When a distribution has one most frequently occurring value, the distribution is said to be unimodal. If a distribution has two most frequently occurring values, then it has two modes and we say it is bimodal. If the distribution has three most frequently occurring values, then it is trimodal. When all the values in a data set are different, the distribution has no mode because no value occurs more frequently than any other value.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">statistics</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">dividends</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Since 2013, Microsoft has paid out </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s1">$ dividend per share the most in a given period'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Since 2013, Microsoft has paid out 0.13$ dividend per share the most in a given period
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Measures-of-dispersion">
+<a class="anchor" href="#Measures-of-dispersion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Measures of dispersion<a class="anchor-link" href="#Measures-of-dispersion"> </a>
+</h2>
+<p>Location is just one dimension in describing data. A second dimension, variability, also referred to as dispersion, measures whether the data values are tightly clustered or spread out.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Range:">
+<a class="anchor" href="#Range:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Range:<a class="anchor-link" href="#Range:"> </a>
+</h4>
+<p>Range, the range of a set of data is the difference between the largest and smallest values, the result of subtracting the sample maximum and minimum. It is expressed in the same units as the data.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">maX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dividends</span><span class="p">)</span>
+<span class="n">miN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dividends</span><span class="p">)</span>
+<span class="n">Range</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">dividends</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'The maximum dividend per share paid by Microsoft is </span><span class="si">{</span><span class="n">maX</span><span class="si">}</span><span class="s1">$'</span><span class="p">)</span> 
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'The minimum dividend per share paid by Microsoft is </span><span class="si">{</span><span class="n">miN</span><span class="si">}</span><span class="s1">$'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Hence, the range is </span><span class="si">{</span><span class="n">Range</span><span class="si">}</span><span class="s1">$'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The maximum dividend per share paid by Microsoft is 3.08$
+The minimum dividend per share paid by Microsoft is 0.08$
+Hence, the range is 3.0$
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Variance-sample-and-population:">
+<a class="anchor" href="#Variance-sample-and-population:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variance sample and population:<a class="anchor-link" href="#Variance-sample-and-population:"> </a>
+</h4>
+<p>The variance and standard deviation are the two most widely used measures of dispersion
+Variance is defined as the average of the squared deviations around the mean.
+Population variance is a measure of the spread of population data. Hence, population variance can be defined as the average of the distances from each data point in a particular population to the mean squared, and it indicates how data points are spread out in the population. we can compute the population variance.Denoted by the symbol σ2</p>
+<p>Population formula:</p>
+<p>
+$$\sigma^2 = \dfrac{\sum_{i=1}^N(x_i - \mu)^2}N $$
+</p>
+<p>While sample formula is:</p>
+<p>
+$$s^2 = \dfrac{\sum_{i=1}^n(x_i - \bar x)^2}{n-1} $$
+</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Standard-deviation-sample-and-population:">
+<a class="anchor" href="#Standard-deviation-sample-and-population:" aria-hidden="true"><span class="octicon octicon-link"></span></a>Standard deviation sample and population:<a class="anchor-link" href="#Standard-deviation-sample-and-population:"> </a>
+</h4>
+<p>Standard Deviation (SD) is the positive square root of the variance. It is represented by the Greek letter ‘σ’ and is used to measure the amount of variation or dispersion of a set of data values relative to its mean (average), thus interpret the reliability of the data. If it is smaller then the data points lie close to the mean value, thus showing reliability. But if it is larger then data points spread far from the mean.</p>
+<p>Population formula:</p>
+<p>
+$$\sigma^2 = \sqrt{\dfrac{\sum_{i=1}^N(x_i - \mu)^2}N} $$
+</p>
+<p>While sample formula is:</p>
+<p>
+$$s^2 = \sqrt{\dfrac{\sum_{i=1}^n(x_i - \bar x)^2}{n-1}} $$
+</p>
+<p>Hence, Variance Measures Dispersion within the Data Set while the standard deviation measures spread around the mean!</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"The variance of Microsoft's daily stock returns:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">msft_returns</span><span class="p">),</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"The standard deviation of Microsoft's daily stock returns:"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">msft_returns</span><span class="p">),</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The variance of Microsoft's daily stock returns: 0.00028
+The standard deviation of Microsoft's daily stock returns: 0.01684
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Relationship-between-variables">
+<a class="anchor" href="#Relationship-between-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Relationship between variables<a class="anchor-link" href="#Relationship-between-variables"> </a>
+</h2>
+<p>Relationship between variables means, In a dataset, the values of one variable correspond to the values of another variable. In other words, knowing the value of one variable, for a given case, helps you to predict the value of the other one.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Covariance">
+<a class="anchor" href="#Covariance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Covariance<a class="anchor-link" href="#Covariance"> </a>
+</h4>
+<p>Covariance provides insight into how two variables are related to one another. More precisely, covariance refers to the measure of how two random variables in a data set will change together. A positive covariance means that the two variables at hand are positively related, and they move in the same direction. A negative covariance means that the variables are inversely related, or that they move in opposite directions.
+Both variance and covariance measure how data points are distributed around a calculated mean. However, variance measures the spread of data along a single axis, while covariance examines the directional relationship between two variables.</p>
+<p>Population formula:</p>
+<p>
+$$\sigma_{xy} = \dfrac{\sum_{i=1}^N(x_i - \mu_x)*(y_i - \mu_y)}N $$
+</p>
+<p>While sample formula is:</p>
+<p>
+$$s_{xy} = \dfrac{\sum_{i=1}^n(x_i - \bar x)*(y_i - \bar y)}{n-1} $$
+</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">assets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'META'</span><span class="p">,</span><span class="s1">'AMZN'</span><span class="p">,</span><span class="s1">'NFLX'</span><span class="p">,</span><span class="s1">'GOOG'</span><span class="p">,</span><span class="s1">'MSFT'</span><span class="p">,</span><span class="s1">'NVDA'</span><span class="p">,</span><span class="s1">'TSLA'</span><span class="p">]</span>
+<span class="n">pf_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">:</span>
+    <span class="n">pf_data</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="s2">"2021-10-01"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">"2021-12-31"</span><span class="p">,</span> <span class="n">index_col</span> <span class="o">=</span> <span class="s1">'Date'</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">'Adj Close'</span><span class="p">]</span>
+
+<span class="n">returns</span> <span class="o">=</span> <span class="n">pf_data</span><span class="o">.</span><span class="n">pct_change</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cov</span><span class="p">()</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+[*********************100%***********************]  1 of 1 completed
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cov</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>META</th>
+      <th>AMZN</th>
+      <th>NFLX</th>
+      <th>GOOG</th>
+      <th>MSFT</th>
+      <th>NVDA</th>
+      <th>TSLA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>META</th>
+      <td>0.000404</td>
+      <td>0.000137</td>
+      <td>0.000143</td>
+      <td>0.000135</td>
+      <td>0.000134</td>
+      <td>0.000252</td>
+      <td>0.000189</td>
+    </tr>
+    <tr>
+      <th>AMZN</th>
+      <td>0.000137</td>
+      <td>0.000253</td>
+      <td>0.000075</td>
+      <td>0.000142</td>
+      <td>0.000111</td>
+      <td>0.000362</td>
+      <td>0.000064</td>
+    </tr>
+    <tr>
+      <th>NFLX</th>
+      <td>0.000143</td>
+      <td>0.000075</td>
+      <td>0.000319</td>
+      <td>0.000098</td>
+      <td>0.000115</td>
+      <td>0.000196</td>
+      <td>0.000151</td>
+    </tr>
+    <tr>
+      <th>GOOG</th>
+      <td>0.000135</td>
+      <td>0.000142</td>
+      <td>0.000098</td>
+      <td>0.000221</td>
+      <td>0.000177</td>
+      <td>0.000284</td>
+      <td>0.000074</td>
+    </tr>
+    <tr>
+      <th>MSFT</th>
+      <td>0.000134</td>
+      <td>0.000111</td>
+      <td>0.000115</td>
+      <td>0.000177</td>
+      <td>0.000207</td>
+      <td>0.000287</td>
+      <td>0.000182</td>
+    </tr>
+    <tr>
+      <th>NVDA</th>
+      <td>0.000252</td>
+      <td>0.000362</td>
+      <td>0.000196</td>
+      <td>0.000284</td>
+      <td>0.000287</td>
+      <td>0.001286</td>
+      <td>0.000490</td>
+    </tr>
+    <tr>
+      <th>TSLA</th>
+      <td>0.000189</td>
+      <td>0.000064</td>
+      <td>0.000151</td>
+      <td>0.000074</td>
+      <td>0.000182</td>
+      <td>0.000490</td>
+      <td>0.001463</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Correlation-coefficient">
+<a class="anchor" href="#Correlation-coefficient" aria-hidden="true"><span class="octicon octicon-link"></span></a>Correlation coefficient<a class="anchor-link" href="#Correlation-coefficient"> </a>
+</h4>
+<p>Correlation shows the strength of a relationship between two variables and is expressed numerically by the correlation coefficient. While covariance measures the direction of a relationship between two variables, correlation measures the strength of that relationship. There are many different measures of correlation but the most common one, and the one I use is the Pearson Coefficient of Correlation.</p>
+<p>Output values of the Pearson Correlation Coefficient range between values of +1 and -1, or 100% and -100%, where +1 represents perfect positive correlation and -1 perfect negative correlation. A measure of 0 would suggest the two variables are perfectly uncorrelated, and there is no linear relationship between them. However, that doesn’t necessarily mean the variables are independent – as they might have a relationship that is not linear. Scatterplot charts are a good way of visualizing various values for correlation</p>
+<p>Population formula:</p>
+<p>
+$$p = \dfrac{\sigma_{xy}}{\sigma_y\sigma_x} $$
+</p>
+<p>While sample formula is:</p>
+<p>
+$$r = \dfrac{s_{xy}}{s_ys_x} $$
+</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">corr</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>META</th>
+      <th>AMZN</th>
+      <th>NFLX</th>
+      <th>GOOG</th>
+      <th>MSFT</th>
+      <th>NVDA</th>
+      <th>TSLA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>META</th>
+      <td>1.000000</td>
+      <td>0.426954</td>
+      <td>0.399251</td>
+      <td>0.451141</td>
+      <td>0.462463</td>
+      <td>0.349046</td>
+      <td>0.245190</td>
+    </tr>
+    <tr>
+      <th>AMZN</th>
+      <td>0.426954</td>
+      <td>1.000000</td>
+      <td>0.263913</td>
+      <td>0.599965</td>
+      <td>0.486596</td>
+      <td>0.635210</td>
+      <td>0.105951</td>
+    </tr>
+    <tr>
+      <th>NFLX</th>
+      <td>0.399251</td>
+      <td>0.263913</td>
+      <td>1.000000</td>
+      <td>0.369411</td>
+      <td>0.449535</td>
+      <td>0.306623</td>
+      <td>0.221220</td>
+    </tr>
+    <tr>
+      <th>GOOG</th>
+      <td>0.451141</td>
+      <td>0.599965</td>
+      <td>0.369411</td>
+      <td>1.000000</td>
+      <td>0.829273</td>
+      <td>0.532454</td>
+      <td>0.130574</td>
+    </tr>
+    <tr>
+      <th>MSFT</th>
+      <td>0.462463</td>
+      <td>0.486596</td>
+      <td>0.449535</td>
+      <td>0.829273</td>
+      <td>1.000000</td>
+      <td>0.556526</td>
+      <td>0.331061</td>
+    </tr>
+    <tr>
+      <th>NVDA</th>
+      <td>0.349046</td>
+      <td>0.635210</td>
+      <td>0.306623</td>
+      <td>0.532454</td>
+      <td>0.556526</td>
+      <td>1.000000</td>
+      <td>0.357039</td>
+    </tr>
+    <tr>
+      <th>TSLA</th>
+      <td>0.245190</td>
+      <td>0.105951</td>
+      <td>0.221220</td>
+      <td>0.130574</td>
+      <td>0.331061</td>
+      <td>0.357039</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>One of the most common pitfalls of correlation analysis is that correlation is not causation!</p>
+<p>Just because two variables have shown a historic correlation doesn’t mean that one of the variables causes the other to move. The causation of the two variables moving with a positive or negative correlation could be a third completely unconsidered variable OR a combination of many factors. In theory, we want to try and understand the causes for relationships between variables so we can have a more accurate idea about when those relationships might change and if they will. The reality is that this is very hard to achieve and so practically speaking correlation analysis is often used to summarise relationships and use them as forward-looking predicator under the caveat that we understand it is likely that there are many factors at play that are responsible for the causation of the relationship.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="References">
+<a class="anchor" href="#References" aria-hidden="true"><span class="octicon octicon-link"></span></a>References<a class="anchor-link" href="#References"> </a>
+</h4>
+<ul>
+<li>"Quantitative Investment Analysis", by DeFusco, McLeavey, Pinto, and Runkle</li>
+<li>"Practical Statistics for Data Scientists", by Andrew Bruce, Peter C. Bruce, and Peter Gedeck</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><a class="u-url" href="/Monewmetrics/statistics%20&%20probability/2022/08/21/Stats1.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Monewmetrics/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Monewmetrics/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Monewmetrics/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Mbarak J Abubakar</li>
+          <li><a class="u-email" href="mailto:mjabubakar22@gmail.com">mjabubakar22@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>In God we trust. All others must bring data - W. Edwards Deming</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/mjabubakar22" target="_blank" title="mjabubakar22"><svg class="svg-icon grey"><use xlink:href="/Monewmetrics/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/mj-abubakar" target="_blank" title="mj-abubakar"><svg class="svg-icon grey"><use xlink:href="/Monewmetrics/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
