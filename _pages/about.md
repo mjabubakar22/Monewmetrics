@@ -4,8 +4,7 @@ title: About
 permalink: /about/
 ---
 
-As a Data Science and finance enthusiast I enjoy working with data as it helps to produce actionable insights from importing and wrangling to model development, evaluation, and deployment.
-
+As a Data Science and Finance enthusiast I enjoy working with data from importing, wrangling and analysis of data that produce actionable insights which leads to model development, evaluation, and deployment.
 
 Currently, I work in accounting, I don’t have a background in computer science or statistics nor do I have any professional experience as one. I ‘ve learned the basics through different books and courses but I’ve created and used Monewmetrics as a way to not only put to practice what I’ve learnt (and still learning) but also build up on that foundation, hence most of what you’ll encounter throughout the website will be me researching and learning different ideas, models and concepts for the first time.
 
@@ -16,13 +15,13 @@ Currently, I work in accounting, I don’t have a background in computer science
 Monewmetrics focuses on 3 areas:
 
 
-Quantitative research, where I analyze (mostly financial) data and use advanced statistical models like the linear regression model or time series models like the autoregressive model to form predictions. Python is my preferred language since it has great libraries for data analysis, machine learning, and statistics.
+Quantitative research: where I analyze (mostly financial) data and use advanced statistical models like the linear regression model or time series models like the autoregressive model to form predictions. Python is my preferred language since it has great libraries for data analysis, machine learning, and statistics.
 
 
-Statistics & probability, where I walk through different concepts from the basics like measures of location and dispersion of data to more advanced concepts like regression assumptions
+Statistics & probability: where I walk through different concepts from the basics like measures of location and dispersion of data to more advanced concepts like regression assumptions
 
 
-Financial analysis, (through seeking alpha) where I do in-depth financial analysis on companies quantitatively like 3 statement (financial statement) modeling, scenario, and sensitivity analysis, DCF, etc, but also qualitatively like understanding company’s business model and competitive advantage, perform industry analysis and product market fit, etc.
+Financial analysis: (through seeking alpha) where I do in-depth financial analysis on companies quantitatively like 3 statement (financial statement) modeling, scenario, and sensitivity analysis, DCF, etc, but also qualitatively like understanding company’s business model and competitive advantage, perform industry analysis and product market fit, etc.
 
 
 I’m always open to feedback, you can reach out and/or connect with me on [Linkedin!](https://www.linkedin.com/in/mj-abubakar/)
