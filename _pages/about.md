@@ -4,11 +4,6 @@ title: About
 permalink: /about/
 ---
 
-As a Data Science and Finance enthusiast I enjoy working with data from importing, wrangling and analysis of data that produce actionable insights which leads to model development, evaluation, and deployment.
-
-I come from an accounting and finance background, I don’t have a background in computer science or statistics nor do I have any professional experience as one. I ‘ve learned the basics through different books and courses but I’ve created and used Monewmetrics as a way to not only put to practice what I’ve learnt (and still learning) but also build up on that foundation, hence most of what you’ll encounter throughout the website will be me researching and learning different ideas, models and concepts for the first time.
-
-
 ![monew](https://user-images.githubusercontent.com/80532199/192338336-13187d8a-9fd3-4e40-89f1-24e4adde3ee7.png)
 
 
@@ -34,6 +29,6 @@ NOT FINANCIAL ADVICE!
 My content is intended to be used and must be used for informational and educational purposes only. I am not an attorney, CPA, or financial advisor, nor am I holding myself out to be, and the information contained on this blog/notebook is not a substitute for financial advice, None of the information contained here constitutes an offer (or solicitation of an offer) to buy or sell any security or financial instrument to make any investment or to participate in any particular trading strategy. Always seek advice from a professional who is aware of the facts and circumstances of your individual situation. Or, Independently research and verify any information that you find on my blog/notebook and wish to rely upon in making any investment decision or otherwise. I accept no liability whatsoever for any loss or damage you may incur.
 
 
-This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
+This website is powered by **[fastpages](https://github.com/fastai/fastpages).
 
 
