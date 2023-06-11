@@ -4,22 +4,24 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Title | Monewmetrics</title>
+<title>EDA PART 2, Graphical Analysis | Monewmetrics</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Title" />
+<meta property="og:title" content="EDA PART 2, Graphical Analysis" />
 <meta name="author" content="Mbarak J Abubakar" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Randomness is a reflection of ignorance, randomness is when human beings can longer compute all the facts - Firas Zahabi" />
-<meta property="og:description" content="Randomness is a reflection of ignorance, randomness is when human beings can longer compute all the facts - Firas Zahabi" />
-<link rel="canonical" href="https://mjabubakar22.github.io/Monewmetrics/2022/10/07/Stats2.html" />
-<meta property="og:url" content="https://mjabubakar22.github.io/Monewmetrics/2022/10/07/Stats2.html" />
+<meta name="description" content="In this we’ll go through some visualization techniques performed during explanatory data analysis" />
+<meta property="og:description" content="In this we’ll go through some visualization techniques performed during explanatory data analysis" />
+<link rel="canonical" href="https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/10/07/Stats2.html" />
+<meta property="og:url" content="https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/10/07/Stats2.html" />
 <meta property="og:site_name" content="Monewmetrics" />
+<meta property="og:image" content="https://mjabubakar22.github.io/Monewmetrics/images/plots.jpg" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-10-07T00:00:00-05:00" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Title" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://mjabubakar22.github.io/Monewmetrics/images/plots.jpg" />
+<meta property="twitter:title" content="EDA PART 2, Graphical Analysis" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mbarak J Abubakar"},"dateModified":"2022-10-07T00:00:00-05:00","datePublished":"2022-10-07T00:00:00-05:00","description":"Randomness is a reflection of ignorance, randomness is when human beings can longer compute all the facts - Firas Zahabi","headline":"Title","mainEntityOfPage":{"@type":"WebPage","@id":"https://mjabubakar22.github.io/Monewmetrics/2022/10/07/Stats2.html"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://mjabubakar22.github.io/Monewmetrics/images/Monewmetrics.png"},"name":"Mbarak J Abubakar"},"url":"https://mjabubakar22.github.io/Monewmetrics/2022/10/07/Stats2.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mbarak J Abubakar"},"dateModified":"2022-10-07T00:00:00-05:00","datePublished":"2022-10-07T00:00:00-05:00","description":"In this we’ll go through some visualization techniques performed during explanatory data analysis","headline":"EDA PART 2, Graphical Analysis","image":"https://mjabubakar22.github.io/Monewmetrics/images/plots.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/10/07/Stats2.html"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://mjabubakar22.github.io/Monewmetrics/images/Monewmetrics.png"},"name":"Mbarak J Abubakar"},"url":"https://mjabubakar22.github.io/Monewmetrics/statistics%20&%20probability/2022/10/07/Stats2.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/Monewmetrics/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://mjabubakar22.github.io/Monewmetrics/feed.xml" title="Monewmetrics" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -55,6 +57,21 @@
     </script>
 
 
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.js"></script>
+<script type="text/javascript">
+  if (typeof require !== 'undefined') {
+      require.undef("plotly");
+      requirejs.config({
+          paths: {
+              'plotly': ['https://cdn.plot.ly/plotly-latest.min']
+          }
+      });
+      require(['plotly'], function(Plotly) {
+          window._Plotly = Plotly;
+      });
+  }
+</script>
 
 
 <script>
@@ -149,7 +166,7 @@ window.onload = wrap_img;
         <article class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Title</h1>
+    <h1 class="post-title">EDA PART 2, Graphical Analysis</h1>
   </header>
 
   <div class="post-content">
@@ -162,20 +179,6 @@ window.onload = wrap_img;
 
 <div class="container" id="notebook-container">
         
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<blockquote><p>In this notebook, we'll go  through some visualization techniques performed during explanatory data analysis</p>
-<ul>
-<li>title :EDA Part 2- toc: true</li>
-<li>badges: true</li>
-<li>categories:[Statistics &amp; Probability]</li>
-<li>image:images/plots.jpg</li>
-</ul>
-</blockquote>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>While non-graphical analysis provides us with valuable insights, graphical techniques provide a visual representation that enhances our understanding of the data. graphical analysis serves as a vital tool for exploring and understanding data.</p>
