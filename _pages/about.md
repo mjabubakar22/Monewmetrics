@@ -19,8 +19,6 @@ Statistics & probability: where I walk through different concepts from the basic
 Financial analysis: (through seeking alpha) where I do in-depth financial analysis on companies quantitatively like 3 statement (financial statement) modeling, scenario, and sensitivity analysis, DCF, etc, but also qualitatively like understanding company’s business model and competitive advantage, perform industry analysis and product market fit, etc.
 
 
-I’m always open to feedback, you can reach out and/or connect with me on [Linkedin!](https://www.linkedin.com/in/mj-abubakar/)
-
 
 ### DISCLAIMER!
 Before proceeding, please make sure that you note the following important information:
