@@ -7,16 +7,13 @@ permalink: /about/
 ![monew](https://user-images.githubusercontent.com/80532199/192338336-13187d8a-9fd3-4e40-89f1-24e4adde3ee7.png)
 
 
-Monewmetrics focuses on 3 areas:
+Monewmetrics is centered on three core areas:
 
+Quantitative Research: I analyze financial data and apply advanced statistical models—such as linear regression and autoregressive time series models—to generate predictive insights. Python is my primary tool, given its robust libraries for data analysis, machine learning, and statistical modeling.
 
-Quantitative research: where I analyze (mostly financial) data and use advanced statistical models like the linear regression model or time series models like the autoregressive model to form predictions. Python is my preferred language since it has great libraries for data analysis, machine learning, and statistics.
+Statistics & Probability: I explore a wide range of statistical concepts, I cover foundational topics like data location and dispersion measures and will cover more advanced principles, such as regression assumptions and their applications.
 
-
-Statistics & probability: where I walk through different concepts from the basics like measures of location and dispersion of data to more advanced concepts like regression assumptions
-
-
-Financial analysis: (through seeking alpha) where I do in-depth financial analysis on companies quantitatively like 3 statement (financial statement) modeling, scenario, and sensitivity analysis, DCF, etc, but also qualitatively like understanding company’s business model and competitive advantage, perform industry analysis and product market fit, etc.
+Financial Analysis: Through [SeekingAlpha](https://seekingalpha.com/user/52414763/instablogs), I conduct comprehensive financial analysis on companies, both quantitatively and qualitatively. This includes 3-statement financial modeling, scenario and sensitivity analysis, DCF valuation, and deeper insights into business models, competitive advantages, industry trends, and market positioning.
 
 
 
