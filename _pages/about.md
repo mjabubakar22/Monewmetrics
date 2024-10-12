@@ -13,7 +13,7 @@ Quantitative Research: I analyze financial data and apply advanced statistical m
 
 Statistics & Probability: I explore a wide range of statistical concepts, I cover foundational topics like data location and dispersion measures and will cover more advanced principles, such as regression assumptions and their applications.
 
-Financial Analysis: Through [SeekingAlpha](https://seekingalpha.com/user/52414763/instablogs), I conduct comprehensive financial analysis on companies, both quantitatively and qualitatively. This includes 3-statement financial modeling, scenario and sensitivity analysis, DCF valuation, and deeper insights into business models, competitive advantages, industry trends, and market positioning.
+Financial Analysis: Through my [LinkedIn](https://www.linkedin.com/in/mbarak-abubakar/recent-activity/articles/) or [SeekingAlpha](https://seekingalpha.com/user/52414763/instablogs),I post comprehensive financial analysis on companies, both quantitatively and qualitatively. This includes 3-statement financial modeling, scenario and sensitivity analysis, DCF valuation, and deeper insights into business models, competitive advantages, industry trends, market positioning and more.
 
 
 
