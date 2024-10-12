@@ -13,6 +13,9 @@ gem "minima"
 # To upgrade, run `bundle update github-pages`.
 # gem "github-pages", group: :jekyll_plugins
 # If you have any plugins, put them here!
+
+gem 'ffi', '~> 1.15.5'
+
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"
   gem 'jekyll-octicons'
