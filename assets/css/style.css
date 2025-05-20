@@ -465,6 +465,11 @@ pre code { font-size: 15px !important; }
 
 .youtube-iframe-wrapper iframe, .youtube-iframe-wrapper object, .youtube-iframe-wrapper embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
+/* Fix dark theme header */
+.site-header { background-color: #000 !important; color: #fff !important; border-bottom: 1px solid #444; }
+
+.site-title, .site-title a { color: #fff !important; }
+
 /*-----------------------------------*/
 /*----- ADD YOUR STYLES BELOW -------*/
 html, body, input, textarea, select, button { color: rgba(255, 255, 255, 0.87) !important; background-color: black !important; }
