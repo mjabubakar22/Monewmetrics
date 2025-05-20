@@ -563,4 +563,11 @@ li .post-meta-description { color: rgba(255, 255, 255, 0.69) !important; }
 
 p code { font-size: 19px; }
 
+/* Force dark theme header fix */
+.site-header, .site-header a, .site-title, .site-title a, .site-nav { background-color: #000000 !important; color: #ffffff !important; border-bottom: 1px solid #444444 !important; }
+
+.site-nav .page-link { color: #ffffff !important; }
+
+.site-header { box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5) !important; }
+
 /*# sourceMappingURL=style.css.map */
