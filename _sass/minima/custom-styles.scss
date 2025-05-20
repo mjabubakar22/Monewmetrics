@@ -12,3 +12,19 @@
 
 // If you want to turn off dark background for syntax highlighting, comment or delete the below line.
 @import "minima/fastpages-dracula-highlight";
+
+/* Force dark theme header fix */
+.site-header, .site-header a, .site-title, .site-title a, .site-nav {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #444444 !important;
+}
+
+.site-nav .page-link {
+  color: #ffffff !important;
+}
+
+.site-header {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5) !important;
+}
+
